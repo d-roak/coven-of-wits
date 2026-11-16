@@ -1,76 +1,16 @@
 # Coven of Wits
 
+![Coven of Wits — three mages at a candlelit game table](docs/banner.svg)
+
 Brain duels and solo puzzles for small mages. Play a bot in the browser, or a person online.
 
 The grove uses original SVG familiars, a candlelit ritual table, and a moss-and-parchment palette inspired by cozy occult games.
 
-## The Devil’s Plan catalog
+## Games
 
-41 playable entries cover Seasons 1 and 2 and the eight games identified in Season 3 episodes 1–5, released November 10, 2026. Later Season 3 episodes are not included. Filter by season or search names and mechanics on the home screen.
+48 games cover deduction, memory, bidding and board strategy. Search the catalog by name or mechanic to find a table.
 
-These are independent browser adaptations. Each card includes edition notes and a rule source. Smaller tables, shortened matches, manual memory phases and automatic scoring replace parts of the television format. There is no season-wide Piece economy. The cooperative prize games have solo editions.
-
-Dice Poker was announced but never played on screen; its implementation uses standard five-dice poker house rules. Mystery Stock Market uses original pricing formulas. Wall Go II uses a documented house variant because the complete broadcast rules could not be verified. Those entries are labelled on their cards. Other edition notes identify narrower changes, including Zoo’s auction tie rules.
-
-### Season 1 · 16 entries
-
-| Game                       | Match  |
-| -------------------------- | ------ |
-| The Virus Game             | Main   |
-| Cooperative Puzzle         | Prize  |
-| Rules Race                 | Main   |
-| Fragments of Memory        | Prize  |
-| Secret Number              | Main   |
-| Word Tower                 | Prize  |
-| Zoo                        | Main   |
-| Scale Game                 | Prize  |
-| Laying Grass               | Main   |
-| Montage                    | Prize  |
-| Four-Player Three in a Row | Prize  |
-| Blind Gomoku               | Secret |
-| Dice Poker                 | Final  |
-| Nine Men's Morris          | Final  |
-| Hexagon                    | Final  |
-| Equation Hi-Lo             | Main   |
-
-### Season 2 · 17 entries
-
-| Game               | Match  |
-| ------------------ | ------ |
-| Crooked Cops       | Main   |
-| Remove One         | Prison |
-| Unknown            | Main   |
-| Time Auction       | Prison |
-| Halloween Monster  | Main   |
-| Sniper Hold’em     | Prison |
-| Treasure Island    | Main   |
-| Triple Dice        | Prison |
-| Balance Mancala    | Main   |
-| Wall Go            | Prison |
-| Doubt and Bet      | Main   |
-| Equation Pyramid   | Prison |
-| Big or Small       | Final  |
-| Bagh Chal          | Final  |
-| Question and Truth | Final  |
-| Find the Key       | Secret |
-| Knight's Tour      | Secret |
-
-### Season 3 · 8 entries
-
-| Game                 | Match  |
-| -------------------- | ------ |
-| Count the Cubes      | Main   |
-| Count the Rectangles | Main   |
-| Lay the Grass        | Main   |
-| Memory Poker         | Main   |
-| Heavy 13             | Prison |
-| Mystery Stock Market | Main   |
-| Russian Roulette     | Prison |
-| Wall Go II           | Secret |
-
-Multiplayer editions support local bots, quick match and private rooms. Solo editions run entirely in the browser. Online tables include shared chat for negotiation; messages are visible to everyone at that table.
-
-The seven original games remain available: Mind Auction, Liar’s Bones, Lone Spark, Last Candle, Rune Drop, Turncoat and Rune Cipher.
+Multiplayer games support local bots, quick match and private rooms. Solo puzzles run entirely in the browser. Online tables include shared chat for negotiation; messages are visible to everyone at that table. Each game card includes rules and edition notes.
 
 ## Run
 
@@ -122,7 +62,7 @@ The shared contract keeps these boundaries:
 1. Write `src/shared/games/yourGame.ts` exporting a `GameDef`. Throw `illegal("...")` for anything not allowed.
 2. Add it to `games` in `src/shared/games/index.ts`.
 3. Write a board in `src/client/boards/` and register it in `src/client/boards/index.ts`, or expose a `TrialView` for the shared trial board.
-4. For a Devil’s Plan entry, add season, match type, adaptation notes and rule sources to its seasonal catalog.
+4. For a catalog entry, add its metadata, edition notes and rule sources alongside its engine.
 
 Catalog tests check all 41 IDs, season counts and advertised legal controls. A test fails if a game has no board, and every game with rivals has its bot played to a finish at its smallest and largest table automatically. Co-locate rule, rejection and hidden-information tests with the engine. The seasonal suites exercise scoring and invalid actions. An emblem for the home card is optional (`src/client/screens/Sigil.tsx`).
 
@@ -152,7 +92,7 @@ Each is marked in the code with a `ponytail:` comment naming the upgrade path.
 
 The GitHub link points to [d-roak/coven-of-wits](https://github.com/d-roak/coven-of-wits). Share buttons appear on the home screen, game cards, tables, results and waiting rooms. They offer device sharing, a copied link, X, Bluesky, WhatsApp and Facebook. Public game links open the matching shelf and card. Only the explicit room-invite action includes a room code; public shares omit names and game state.
 
-“Send feedback” opens the raven reporter. Pick a type, write a note, then review the screenshot and debug details before creating an issue. Both attachments are selected by default. The screenshot captures the visible app, including game details; the feedback dialog itself is excluded. Diagnostics include browser and viewport information, game ID and public round/move counts, plus error categories and asset locations. They omit raw error messages, stack traces, query strings and game state.
+“Send feedback” opens the raven reporter. Pick a type, write a note, then review the screenshot and debug details before creating an issue. Both attachments are selected by default. The screenshot captures the full page, including content below the fold and game details; the feedback dialog itself is excluded. Diagnostics include browser and viewport information, game ID and public round/move counts, plus error categories and asset locations. They omit raw error messages, stack traces, query strings and game state.
 
 Feedback needs a server-side `GITHUB_FEEDBACK_TOKEN` with **Issues: write** and **Contents: write** access to this repository. Use a repository-scoped fine-grained token in the server environment or deployment secret store. Never put it in a `VITE_` variable or source control. The server reads exported environment variables; it does not automatically load `.env` files. `.env.example` lists the optional settings:
 
@@ -164,3 +104,20 @@ Feedback needs a server-side `GITHUB_FEEDBACK_TOKEN` with **Issues: write** and 
 Screenshots are committed under `screenshots/` through GitHub's Contents API, then linked in the issue. They have the same visibility as the repository. The app shows the issue link after delivery. Without the token, the reporter supports writing and previewing but disables sending.
 
 Run one API process and keep the receipt directory on persistent storage. Receipts contain report hashes and delivery status, not report text or screenshots. They let a retry recover an issue after a lost response without posting it twice. Per-connection and global rate limits bound anonymous submissions; behind a proxy, connections share the proxy's limit. Multiple API replicas require shared receipts and rate limits first.
+
+## Contribute
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md) for setup, coding conventions and pull request checks.
+
+## License
+
+[MIT](LICENSE), copyright 2026 droak. Third-party dependencies retain their own licenses.
+
+## Deploy to Vercel
+
+```sh
+vercel link --project coven-of-wits
+vercel deploy --prod
+```
+
+Vercel builds the Vite client. Solo puzzles and bot games run in the browser. Online rooms and feedback require the Node server: run `pnpm build && pnpm start` on a persistent host, then proxy `/ws` and `/api` to that host. Room state and feedback receipts currently assume one server process; deploying them across Vercel function instances requires shared storage and room routing first.

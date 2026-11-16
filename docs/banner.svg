@@ -1,0 +1,328 @@
+<svg
+	xmlns="http://www.w3.org/2000/svg"
+	width="1200"
+	height="420"
+	viewBox="0 0 1200 420"
+	role="img"
+	aria-labelledby="title desc"
+>
+	<title id="title">Coven of Wits</title>
+	<desc id="desc">Three small mages gather around a candlelit game table in a forest.</desc>
+	<rect width="1200" height="420" rx="24" fill="#283d35" />
+	<path d="M0 350 Q190 290 420 360 T1200 330 V420 H0Z" fill="#1e3029" />
+	<g fill="#dfba6e">
+		<path d="M74 55l3 9 9 3-9 3-3 9-3-9-9-3 9-3zM590 325l3 9 9 3-9 3-3 9-3-9-9-3 9-3z" />
+		<circle cx="560" cy="66" r="3" />
+		<circle cx="1110" cy="55" r="3" />
+	</g>
+	<text x="68" y="165" fill="#f3e7cb" font-family="Georgia, serif" font-size="68" font-weight="bold">
+		Coven of Wits
+	</text>
+	<text x="72" y="219" fill="#dfba6e" font-family="sans-serif" font-size="23">A little magic. A battle of wits.</text>
+	<text x="72" y="272" fill="#f3e7cb" font-family="sans-serif" font-size="18">
+		Brain duels and solo puzzles for small mages.
+	</text>
+	<svg x="635" y="25" width="530" height="370" class="coven-art" viewBox="0 0 480 340" aria-hidden="true">
+		<path d="M63 272 V145 A177 130 0 0 1 417 145 V272 Z" fill="#263d33" stroke="#292b28" stroke-width="4"></path>
+		<path
+			d="M76 264 V146 A164 118 0 0 1 404 146 V264"
+			fill="none"
+			stroke="#a6ba7d"
+			stroke-width="2"
+			opacity="0.45"
+		></path>
+		<g fill="none" stroke="#a6ba7d" stroke-width="2" opacity="0.35">
+			<circle cx="240" cy="147" r="100"></circle>
+			<circle cx="240" cy="147" r="88"></circle>
+			<path d="M240 47 L327 197 H153 Z M240 247 L153 97 H327 Z"></path>
+		</g>
+		<path d="M246 25 a20 20 0 1 0 15 32 a19 19 0 0 1 -15 -32" fill="#dfcfaa" transform="translate(0 -12)"></path>
+		<g fill="#dfcfaa">
+			<path d="M136 87 l3 8 l8 3 l-8 3 l-3 8 l-3 -8 l-8 -3 l8 -3 Z"></path>
+			<path d="M351 79 l2 6 l6 2 l-6 2 l-2 6 l-2 -6 l-6 -2 l6 -2 Z"></path>
+			<circle cx="311" cy="55" r="2"></circle>
+			<circle cx="168" cy="58" r="2"></circle>
+			<circle cx="365" cy="123" r="2"></circle>
+		</g>
+		<g stroke="#292b28" stroke-width="3" stroke-linejoin="round">
+			<path d="M38 267 Q27 192 51 118 Q49 190 69 227 L81 180 Q92 241 78 271 Z" fill="#304b3c"></path>
+			<path d="M402 275 Q386 222 403 165 L414 210 Q426 157 444 145 Q425 231 446 280 Z" fill="#304b3c"></path>
+		</g>
+		<g transform="translate(67 86) rotate(-10 55 80)">
+			<svg
+				class="poff is-think"
+				viewBox="0 0 120 134"
+				width="111"
+				height="123.987"
+				style="--fur: #e1e9d2; --hat: #8bbeb1"
+				aria-hidden="true"
+			>
+				<ellipse class="poff-shadow" cx="60" cy="128" rx="34" ry="5"></ellipse>
+				<g class="poff-body">
+					<ellipse class="poff-ink" cx="46" cy="125" rx="10" ry="6"></ellipse>
+					<ellipse class="poff-ink" cx="74" cy="125" rx="10" ry="6"></ellipse>
+					<path class="poff-hat" d="M35 97 Q60 86 85 97 L99 123 Q80 130 60 123 Q40 130 21 123 Z"></path>
+					<path class="poff-line" d="M38 106 l-5 15 M82 106 l5 15"></path>
+					<circle class="poff-outline" cx="60" cy="88" r="31"></circle>
+					<circle class="poff-outline" cx="35" cy="80" r="14"></circle>
+					<circle class="poff-outline" cx="31" cy="97" r="13"></circle>
+					<circle class="poff-outline" cx="43" cy="111" r="13"></circle>
+					<circle class="poff-outline" cx="60" cy="115" r="13"></circle>
+					<circle class="poff-outline" cx="77" cy="111" r="13"></circle>
+					<circle class="poff-outline" cx="89" cy="97" r="13"></circle>
+					<circle class="poff-outline" cx="85" cy="80" r="14"></circle>
+					<circle class="poff-outline" cx="47" cy="67" r="13"></circle>
+					<circle class="poff-outline" cx="73" cy="67" r="13"></circle>
+					<circle class="poff-fur" cx="60" cy="88" r="31"></circle>
+					<circle class="poff-fur" cx="35" cy="80" r="14"></circle>
+					<circle class="poff-fur" cx="31" cy="97" r="13"></circle>
+					<circle class="poff-fur" cx="43" cy="111" r="13"></circle>
+					<circle class="poff-fur" cx="60" cy="115" r="13"></circle>
+					<circle class="poff-fur" cx="77" cy="111" r="13"></circle>
+					<circle class="poff-fur" cx="89" cy="97" r="13"></circle>
+					<circle class="poff-fur" cx="85" cy="80" r="14"></circle>
+					<circle class="poff-fur" cx="47" cy="67" r="13"></circle>
+					<circle class="poff-fur" cx="73" cy="67" r="13"></circle>
+					<path
+						d="M31 80 Q12 55 18 46 Q36 50 40 74 M80 74 Q88 48 104 46 Q108 65 89 82"
+						fill="undefined"
+						stroke="#292b28"
+						stroke-width="3.5"
+						stroke-linejoin="round"
+					></path>
+					<path class="poff-tuft" d="M27 92 q-1 5 3 8 M93 92 q1 5 -3 8 M52 121 q4 3 8 0 M64 121 q4 3 8 0"></path>
+					<ellipse class="poff-blush" cx="36.500" cy="97" rx="6.500" ry="4"></ellipse>
+					<ellipse class="poff-blush" cx="83.500" cy="97" rx="6.500" ry="4"></ellipse>
+					<g class="poff-eyes">
+						<ellipse class="poff-ink" cx="47.500" cy="87" rx="6.500" ry="8.500"></ellipse>
+						<ellipse class="poff-ink" cx="72.500" cy="87" rx="6.500" ry="8.500"></ellipse>
+						<circle class="poff-glint" cx="49.500" cy="83.500" r="2.800"></circle>
+						<circle class="poff-glint" cx="74.500" cy="83.500" r="2.800"></circle>
+						<circle class="poff-glint" cx="45.500" cy="90.500" r="1.300"></circle>
+						<circle class="poff-glint" cx="70.500" cy="90.500" r="1.300"></circle>
+					</g>
+					<path class="poff-line" d="M41 76 q6 -4 12 -1 M57 99 h6"></path>
+					<path class="poff-scarf" d="M31 102 Q60 116 89 102 L91 115 L72 112 L60 126 L48 112 L29 115 Z"></path>
+					<circle class="poff-band" cx="60" cy="113" r="7"></circle>
+					<path d="M62 108 a5 5 0 1 0 2 8 a5 5 0 0 1 -2 -8" fill="#292b28"></path>
+					<g class="poff-hat-group">
+						<ellipse class="poff-hat" cx="60" cy="63" rx="41" ry="10.500"></ellipse>
+						<path
+							class="poff-hat"
+							d="M35 60 C40 40 50 20 72 7 C79 3 89 8 92 18 C86 13 79 15 77 22 C82 35 85 48 85 60 Q60 71 35 60 Z"
+						></path>
+						<path class="poff-band" d="M36.500 55 Q60 66 85 55 L85 60 Q60 71 35 60 Z"></path>
+						<path
+							class="poff-band"
+							d="M61 30 l2.500 5.500 l5.500 2.500 l-5.500 2.500 l-2.500 5.500 l-2.500 -5.500 l-5.500 -2.500 l5.500 -2.500 z"
+						></path>
+						<circle class="poff-band" cx="92" cy="22" r="5"></circle>
+					</g>
+				</g>
+			</svg>
+		</g>
+		<g transform="translate(297 91) rotate(9 55 80)">
+			<g transform="translate(111 0) scale(-1 1)">
+				<svg
+					class="poff is-happy"
+					viewBox="0 0 120 134"
+					width="111"
+					height="123.987"
+					style="--fur: #eee0b5; --hat: #a6ba7d"
+					aria-hidden="true"
+				>
+					<ellipse class="poff-shadow" cx="60" cy="128" rx="34" ry="5"></ellipse>
+					<g class="poff-body">
+						<ellipse class="poff-ink" cx="46" cy="125" rx="10" ry="6"></ellipse>
+						<ellipse class="poff-ink" cx="74" cy="125" rx="10" ry="6"></ellipse>
+						<path class="poff-hat" d="M35 97 Q60 86 85 97 L99 123 Q80 130 60 123 Q40 130 21 123 Z"></path>
+						<path class="poff-line" d="M38 106 l-5 15 M82 106 l5 15"></path>
+						<circle class="poff-outline" cx="60" cy="88" r="31"></circle>
+						<circle class="poff-outline" cx="35" cy="80" r="14"></circle>
+						<circle class="poff-outline" cx="31" cy="97" r="13"></circle>
+						<circle class="poff-outline" cx="43" cy="111" r="13"></circle>
+						<circle class="poff-outline" cx="60" cy="115" r="13"></circle>
+						<circle class="poff-outline" cx="77" cy="111" r="13"></circle>
+						<circle class="poff-outline" cx="89" cy="97" r="13"></circle>
+						<circle class="poff-outline" cx="85" cy="80" r="14"></circle>
+						<circle class="poff-outline" cx="47" cy="67" r="13"></circle>
+						<circle class="poff-outline" cx="73" cy="67" r="13"></circle>
+						<circle class="poff-fur" cx="60" cy="88" r="31"></circle>
+						<circle class="poff-fur" cx="35" cy="80" r="14"></circle>
+						<circle class="poff-fur" cx="31" cy="97" r="13"></circle>
+						<circle class="poff-fur" cx="43" cy="111" r="13"></circle>
+						<circle class="poff-fur" cx="60" cy="115" r="13"></circle>
+						<circle class="poff-fur" cx="77" cy="111" r="13"></circle>
+						<circle class="poff-fur" cx="89" cy="97" r="13"></circle>
+						<circle class="poff-fur" cx="85" cy="80" r="14"></circle>
+						<circle class="poff-fur" cx="47" cy="67" r="13"></circle>
+						<circle class="poff-fur" cx="73" cy="67" r="13"></circle>
+						<path
+							d="M31 80 Q11 79 13 65 Q29 61 40 75 M80 75 Q94 61 108 65 Q109 80 89 82"
+							fill="undefined"
+							stroke="#292b28"
+							stroke-width="3.5"
+							stroke-linejoin="round"
+						></path>
+						<path class="poff-tuft" d="M27 92 q-1 5 3 8 M93 92 q1 5 -3 8 M52 121 q4 3 8 0 M64 121 q4 3 8 0"></path>
+						<ellipse class="poff-blush" cx="36.500" cy="97" rx="6.500" ry="4"></ellipse>
+						<ellipse class="poff-blush" cx="83.500" cy="97" rx="6.500" ry="4"></ellipse>
+						<path class="poff-line" d="M41 89 q6.500 -10 13 0 M66 89 q6.500 -10 13 0"></path>
+						<path class="poff-ink" d="M53 95 q7 10 14 0 z"></path>
+						<path class="poff-scarf" d="M31 102 Q60 116 89 102 L91 115 L72 112 L60 126 L48 112 L29 115 Z"></path>
+						<circle class="poff-band" cx="60" cy="113" r="7"></circle>
+						<path d="M62 108 a5 5 0 1 0 2 8 a5 5 0 0 1 -2 -8" fill="#292b28"></path>
+						<g class="poff-hat-group">
+							<ellipse class="poff-hat" cx="60" cy="63" rx="41" ry="10.500"></ellipse>
+							<path
+								class="poff-hat"
+								d="M35 60 C40 40 50 20 72 7 C79 3 89 8 92 18 C86 13 79 15 77 22 C82 35 85 48 85 60 Q60 71 35 60 Z"
+							></path>
+							<path class="poff-band" d="M36.500 55 Q60 66 85 55 L85 60 Q60 71 35 60 Z"></path>
+							<path
+								class="poff-band"
+								d="M61 30 l2.500 5.500 l5.500 2.500 l-5.500 2.500 l-2.500 5.500 l-2.500 -5.500 l-5.500 -2.500 l5.500 -2.500 z"
+							></path>
+							<circle class="poff-band" cx="92" cy="22" r="5"></circle>
+						</g>
+					</g>
+				</svg>
+			</g>
+		</g>
+		<g transform="translate(158 35)">
+			<svg
+				class="poff is-idle"
+				viewBox="0 0 120 134"
+				width="164"
+				height="183.188"
+				style="--fur: #f3e7cb; --hat: #cc7965"
+				aria-hidden="true"
+			>
+				<ellipse class="poff-shadow" cx="60" cy="128" rx="34" ry="5"></ellipse>
+				<g class="poff-body">
+					<ellipse class="poff-ink" cx="46" cy="125" rx="10" ry="6"></ellipse>
+					<ellipse class="poff-ink" cx="74" cy="125" rx="10" ry="6"></ellipse>
+					<path class="poff-hat" d="M35 97 Q60 86 85 97 L99 123 Q80 130 60 123 Q40 130 21 123 Z"></path>
+					<path class="poff-line" d="M38 106 l-5 15 M82 106 l5 15"></path>
+					<circle class="poff-outline" cx="60" cy="88" r="31"></circle>
+					<circle class="poff-outline" cx="35" cy="80" r="14"></circle>
+					<circle class="poff-outline" cx="31" cy="97" r="13"></circle>
+					<circle class="poff-outline" cx="43" cy="111" r="13"></circle>
+					<circle class="poff-outline" cx="60" cy="115" r="13"></circle>
+					<circle class="poff-outline" cx="77" cy="111" r="13"></circle>
+					<circle class="poff-outline" cx="89" cy="97" r="13"></circle>
+					<circle class="poff-outline" cx="85" cy="80" r="14"></circle>
+					<circle class="poff-outline" cx="47" cy="67" r="13"></circle>
+					<circle class="poff-outline" cx="73" cy="67" r="13"></circle>
+					<circle class="poff-fur" cx="60" cy="88" r="31"></circle>
+					<circle class="poff-fur" cx="35" cy="80" r="14"></circle>
+					<circle class="poff-fur" cx="31" cy="97" r="13"></circle>
+					<circle class="poff-fur" cx="43" cy="111" r="13"></circle>
+					<circle class="poff-fur" cx="60" cy="115" r="13"></circle>
+					<circle class="poff-fur" cx="77" cy="111" r="13"></circle>
+					<circle class="poff-fur" cx="89" cy="97" r="13"></circle>
+					<circle class="poff-fur" cx="85" cy="80" r="14"></circle>
+					<circle class="poff-fur" cx="47" cy="67" r="13"></circle>
+					<circle class="poff-fur" cx="73" cy="67" r="13"></circle>
+					<path
+						d="M31 80 Q11 79 13 65 Q29 61 40 75 M80 75 Q94 61 108 65 Q109 80 89 82"
+						fill="undefined"
+						stroke="#292b28"
+						stroke-width="3.5"
+						stroke-linejoin="round"
+					></path>
+					<path class="poff-tuft" d="M27 92 q-1 5 3 8 M93 92 q1 5 -3 8 M52 121 q4 3 8 0 M64 121 q4 3 8 0"></path>
+					<ellipse class="poff-blush" cx="36.500" cy="97" rx="6.500" ry="4"></ellipse>
+					<ellipse class="poff-blush" cx="83.500" cy="97" rx="6.500" ry="4"></ellipse>
+					<g class="poff-eyes">
+						<ellipse class="poff-ink" cx="47.500" cy="87" rx="6.500" ry="8.500"></ellipse>
+						<ellipse class="poff-ink" cx="72.500" cy="87" rx="6.500" ry="8.500"></ellipse>
+						<circle class="poff-glint" cx="49.500" cy="83.500" r="2.800"></circle>
+						<circle class="poff-glint" cx="74.500" cy="83.500" r="2.800"></circle>
+						<circle class="poff-glint" cx="45.500" cy="90.500" r="1.300"></circle>
+						<circle class="poff-glint" cx="70.500" cy="90.500" r="1.300"></circle>
+					</g>
+					<path class="poff-line" d="M54.500 97 q2.750 4 5.500 0 q2.750 4 5.500 0"></path>
+					<path class="poff-scarf" d="M31 102 Q60 116 89 102 L91 115 L72 112 L60 126 L48 112 L29 115 Z"></path>
+					<circle class="poff-band" cx="60" cy="113" r="7"></circle>
+					<path d="M62 108 a5 5 0 1 0 2 8 a5 5 0 0 1 -2 -8" fill="#292b28"></path>
+					<g class="poff-hat-group">
+						<ellipse class="poff-hat" cx="60" cy="63" rx="41" ry="10.500"></ellipse>
+						<path
+							class="poff-hat"
+							d="M35 60 C40 40 50 20 72 7 C79 3 89 8 92 18 C86 13 79 15 77 22 C82 35 85 48 85 60 Q60 71 35 60 Z"
+						></path>
+						<path class="poff-band" d="M36.500 55 Q60 66 85 55 L85 60 Q60 71 35 60 Z"></path>
+						<path
+							class="poff-band"
+							d="M61 30 l2.500 5.500 l5.500 2.500 l-5.500 2.500 l-2.500 5.500 l-2.500 -5.500 l-5.500 -2.500 l5.500 -2.500 z"
+						></path>
+						<circle class="poff-band" cx="92" cy="22" r="5"></circle>
+					</g>
+				</g>
+			</svg>
+		</g>
+		<ellipse cx="240" cy="315" rx="182" ry="16" fill="#292b28" opacity="0.22"></ellipse>
+		<g stroke="#292b28" stroke-width="4" stroke-linejoin="round">
+			<path
+				d="M99 246 L91 302 Q111 311 127 303 L139 257 M343 256 L355 304 Q370 310 387 301 L381 244"
+				fill="#b9c8a5"
+			></path>
+			<path d="M67 235 Q240 195 413 235 L409 263 Q240 314 71 263 Z" fill="#b9c8a5"></path>
+			<ellipse cx="240" cy="235" rx="174" ry="47" fill="#d8ddbf"></ellipse>
+			<path d="M179 194 Q240 186 300 194 L295 272 L241 311 L185 272 Z" fill="#cc7965"></path>
+			<path d="M192 201 L197 265 L241 296 L283 265 L287 201" fill="none" stroke="#dfcfaa" stroke-width="2"></path>
+		</g>
+		<g fill="none" stroke="#dfcfaa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+			<path d="M241 253 l15 21 l-15 13 l-15 -13 Z M226 274 h30 M241 253 v34"></path>
+			<path d="M209 258 l-3 8 M272 258 l3 8"></path>
+		</g>
+		<g stroke="#292b28" stroke-width="3" stroke-linejoin="round">
+			<path d="M194 222 L240 212 L286 222 L280 246 L241 239 L200 247 Z" fill="#ad493d"></path>
+			<path
+				d="M193 215 Q218 202 240 215 Q261 202 287 215 L281 238 Q260 227 241 235 Q220 227 199 239 Z"
+				fill="#f3e7cb"
+			></path>
+			<path d="M240 215 l1 20" fill="none"></path>
+			<path
+				d="M205 218 l21 -2 M207 224 l15 -2 M254 217 l9 -3 l9 4 l-8 7 Z M258 230 l14 2"
+				fill="none"
+				stroke-width="2"
+			></path>
+		</g>
+		<g transform="translate(95 235)" stroke="#292b28" stroke-width="2.5" stroke-linejoin="round">
+			<ellipse cy="4" rx="16" ry="5" fill="#dfba6e"></ellipse>
+			<path d="M-7 0 v-34 h14 v34 z" fill="#f3e7cb"></path>
+			<path d="M-7 -34 q4 6 7 0 q4 9 7 0" fill="none"></path>
+			<path d="M0 -36 C-11 -44 1 -50 0 -56 C12 -45 8 -40 0 -36 Z" fill="#dfba6e"></path>
+		</g>
+		<g transform="translate(146 247)" stroke="#292b28" stroke-width="2.5" stroke-linejoin="round">
+			<ellipse cy="4" rx="16" ry="5" fill="#dfba6e"></ellipse>
+			<path d="M-7 0 v-22 h14 v22 z" fill="#f3e7cb"></path>
+			<path d="M-7 -22 q4 6 7 0 q4 9 7 0" fill="none"></path>
+			<path d="M0 -24 C-11 -32 1 -38 0 -44 C12 -33 8 -28 0 -24 Z" fill="#dfba6e"></path>
+		</g>
+		<g transform="translate(385 235)" stroke="#292b28" stroke-width="2.5" stroke-linejoin="round">
+			<ellipse cy="4" rx="16" ry="5" fill="#dfba6e"></ellipse>
+			<path d="M-7 0 v-38 h14 v38 z" fill="#f3e7cb"></path>
+			<path d="M-7 -38 q4 6 7 0 q4 9 7 0" fill="none"></path>
+			<path d="M0 -40 C-11 -48 1 -54 0 -60 C12 -49 8 -44 0 -40 Z" fill="#dfba6e"></path>
+		</g>
+		<g stroke="#292b28" stroke-width="2.5" stroke-linejoin="round">
+			<path d="M319 242 l-13 -18 l8 -19 l15 1 l10 19 l-9 17 Z" fill="#8bbeb1"></path>
+			<path d="M314 205 l8 21 l7 -20 M322 226 l-3 16 M322 226 l17 -1" fill="none"></path>
+			<path d="M55 288 h10 l2 23 h-14 Z" fill="#dfcfaa"></path>
+			<path d="M38 288 Q60 251 82 288 Q60 300 38 288 Z" fill="#cc7965"></path>
+			<path d="M406 301 h9 l1 17 h-13 Z" fill="#dfcfaa"></path>
+			<path d="M395 300 Q409 273 427 300 Q411 309 395 300 Z" fill="#cc7965"></path>
+		</g>
+		<g fill="#dfcfaa">
+			<circle cx="55" cy="281" r="4"></circle>
+			<circle cx="68" cy="287" r="3"></circle>
+			<circle cx="409" cy="295" r="3"></circle>
+		</g>
+		<g fill="none" stroke="#a6ba7d" stroke-width="3" stroke-linecap="round">
+			<path d="M31 307 l8 -13 M39 310 l13 -3 M440 306 l-2 -18 M445 308 l10 -9"></path>
+		</g>
+	</svg>
+</svg>
