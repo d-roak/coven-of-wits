@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { type GameDef, type Outcome, illegal, parseWith, pick } from "../game"
+import { type GameDef, type Outcome, illegal, parseWith, pick } from "../game.js"
 
 export const MORRIS_POINTS: readonly (readonly [number, number])[] = [0, 1, 2].flatMap(
 	(inset) =>

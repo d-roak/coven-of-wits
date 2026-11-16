@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto"
-import type { FeedbackReport } from "../shared/community"
-import type { FeedbackReceipt } from "./feedbackStore"
+import type { FeedbackReport } from "../shared/community.js"
+import type { FeedbackReceipt } from "./feedbackStore.js"
 
 export class FeedbackError extends Error {
 	constructor(

@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { parseWith } from "../../game"
+import { parseWith } from "../../game.js"
 
 export interface TrialMove {
 	action: string

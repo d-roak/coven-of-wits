@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { ACTION_HISTORY } from "./tableSession"
+import { ACTION_HISTORY } from "./tableSession.js"
 
 // Every message on the socket, both directions. Strict: a typo'd field is rejected, not dropped.
 
@@ -26,6 +26,15 @@ export const clientMsg = z.discriminatedUnion("t", [
 	z.object({ t: z.literal("chat"), text: chatText }).strict(),
 ])
 export type ClientMsg = z.infer<typeof clientMsg>
+
+export const realtimeMsg = z.union([
+	clientMsg,
+	z.object({ t: z.literal("resume") }).strict(),
+	z.object({ t: z.literal("leave") }).strict(),
+])
+export type RealtimeMsg = z.infer<typeof realtimeMsg>
+export const realtimeRequest = z.object({ id: z.string().uuid(), token: z.string().uuid(), msg: realtimeMsg }).strict()
+export type RealtimeRequest = z.infer<typeof realtimeRequest>
 
 export const ERROR_CODES = [
 	"BAD_MESSAGE",

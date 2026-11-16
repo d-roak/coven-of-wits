@@ -1,6 +1,25 @@
 {
 	"$schema": "https://openapi.vercel.sh/vercel.json",
 	"framework": "vite",
-	"buildCommand": "pnpm build",
-	"outputDirectory": "dist"
+	"buildCommand": "VITE_DISTRIBUTED_ROOMS=true pnpm build",
+	"outputDirectory": "dist",
+	"functions": {
+		"api/server.ts": {
+			"maxDuration": 300
+		}
+	},
+	"rewrites": [
+		{
+			"source": "/ws",
+			"destination": "/api/server"
+		},
+		{
+			"source": "/health",
+			"destination": "/api/server"
+		},
+		{
+			"source": "/api/:path*",
+			"destination": "/api/server"
+		}
+	]
 }

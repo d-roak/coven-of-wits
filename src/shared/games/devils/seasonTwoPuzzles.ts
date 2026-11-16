@@ -1,6 +1,6 @@
-import { type GameDef, illegal, pick, shuffle } from "../../game"
-import { parseTrialMove, type TrialMove, type TrialView } from "./trial"
-import { active, allowed, at, choice, result, selected, view } from "./seasonTwoCommon"
+import { type GameDef, illegal, pick, shuffle } from "../../game.js"
+import { parseTrialMove, type TrialMove, type TrialView } from "./trial.js"
+import { active, allowed, at, choice, result, selected, view } from "./seasonTwoCommon.js"
 
 const HUES = ["ember", "gold", "brook", "moss", "violet", "ivory"]
 interface UnknownState {
@@ -469,7 +469,7 @@ export const findTheKey: GameDef<KeyState, TrialMove, TrialView> = {
 				action: s.phase === "riddle" ? "answer" : "unlock",
 				kind: "text",
 			}
-		const icons: import("./trial").TrialIcon[] = [
+		const icons: import("./trial.js").TrialIcon[] = [
 			"fox",
 			"ink",
 			"nest",

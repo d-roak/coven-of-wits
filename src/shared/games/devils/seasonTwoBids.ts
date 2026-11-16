@@ -1,6 +1,6 @@
-import { type GameDef, pick } from "../../game"
-import { parseTrialMove, type TrialMove, type TrialView } from "./trial"
-import { allowed, at, choice, randomAction, result, view, cardPiece, step, numberControl } from "./seasonTwoCommon"
+import { type GameDef, pick } from "../../game.js"
+import { parseTrialMove, type TrialMove, type TrialView } from "./trial.js"
+import { allowed, at, choice, randomAction, result, view, cardPiece, step, numberControl } from "./seasonTwoCommon.js"
 
 interface RemoveState {
 	hands: number[][]

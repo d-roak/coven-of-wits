@@ -1,6 +1,6 @@
-import { type AnyGame, type GameDef, illegal, parseWith, shuffle, topSeats } from "../../game"
+import { type AnyGame, type GameDef, illegal, parseWith, shuffle, topSeats } from "../../game.js"
 import { z } from "zod"
-import { type DevilEntry, roundOf, type TrialMove, type TrialView, type TrialPiece } from "./trial"
+import { type DevilEntry, roundOf, type TrialMove, type TrialView, type TrialPiece } from "./trial.js"
 
 const parsePuzzle = parseWith(z.object({ action: z.enum(["answer", "turn"]), value: z.string().max(40) }).strict())
 interface CountState {

@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { type GameDef, illegal, parseWith, pick, shuffle, topSeats } from "../game"
+import { type GameDef, illegal, parseWith, pick, shuffle, topSeats } from "../game.js"
 
 export const EQUATION_ROUNDS = 5
 export const EQUATION_OPERATORS = ["+", "-", "/"] as const

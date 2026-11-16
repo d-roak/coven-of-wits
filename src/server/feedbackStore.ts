@@ -3,6 +3,8 @@ import { chmod, lstat, mkdir, open, readdir, rename, unlink } from "node:fs/prom
 import { join } from "node:path"
 import { randomUUID } from "node:crypto"
 import { z } from "zod"
+import type { Redis } from "./redis.js"
+import { FeedbackError } from "./feedbackGithub.js"
 
 const receiptSchema = z
 	.object({
@@ -71,6 +73,50 @@ export function receiptStore(directory: string) {
 				await dir.sync()
 			} finally {
 				await dir.close()
+			}
+		},
+	}
+}
+
+const SAVE_RECEIPT = `
+if redis.call('GET', KEYS[1]) ~= ARGV[1] then return 0 end
+redis.call('SET', KEYS[2], ARGV[2])
+return 1
+`
+const RELEASE_LEASE = `
+if redis.call('GET', KEYS[1]) == ARGV[1] then return redis.call('DEL', KEYS[1]) end
+return 0
+`
+
+/** Receipts never expire: forgetting an uncertain result would make a later retry duplicate the issue. */
+export function redisReceiptStore(redis: Redis, prefix: string) {
+	return {
+		async acquire(id: string) {
+			const owner = randomUUID()
+			const lease = `${prefix}:lease:${id}`
+			const key = `${prefix}:receipt:${id}`
+			const acquired = await redis.command<string | null>(["SET", lease, owner, "NX", "PX", 90_000])
+			if (acquired !== "OK")
+				throw new FeedbackError("DELIVERY_PENDING", 503, "This report is already being delivered. Retry it shortly.")
+			return {
+				async read(): Promise<FeedbackReceipt | null> {
+					const value = await redis.command<string | null>(["GET", key])
+					if (value === null) return null
+					if (typeof value !== "string" || value.length > 4096) throw new Error("Invalid feedback receipt")
+					return receiptSchema.parse(JSON.parse(value))
+				},
+				async save(receipt: FeedbackReceipt) {
+					if (receipt.id !== id) throw new Error("Feedback receipt ID must match its lease")
+					const saved = await redis.eval<number>(
+						SAVE_RECEIPT,
+						[lease, key],
+						[owner, JSON.stringify(receiptSchema.parse(receipt))],
+					)
+					if (saved !== 1) throw new Error("Feedback receipt lease expired")
+				},
+				async release() {
+					await redis.eval<number>(RELEASE_LEASE, [lease], [owner])
+				},
 			}
 		},
 	}

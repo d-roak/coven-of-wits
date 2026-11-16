@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { type GameDef, illegal, parseWith, pick } from "../game"
+import { type GameDef, illegal, parseWith, pick } from "../game.js"
 
 export const N = 8
 

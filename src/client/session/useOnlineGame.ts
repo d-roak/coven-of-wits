@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import { findGame } from "../../shared/games"
 import type { AnyGame } from "../../shared/game"
 import { type ClientMsg, type ErrorCode, type StateMsg, serverMsg } from "../../shared/protocol"
+import { connectRealtime } from "./realtimeClient"
 import type { GameSession } from "./types"
 
 export type Intent =
@@ -37,21 +38,16 @@ export function useOnlineGame(intent: Intent): OnlineGame {
 	const [lost, setLost] = useState(false)
 	const clockOffset = useRef(0)
 	const socketRef = useRef<WebSocket | null>(null)
+	const realtimeRef = useRef<ReturnType<typeof connectRealtime> | null>(null)
+	const distributed = import.meta.env.VITE_DISTRIBUTED_ROOMS === "true"
 
 	useEffect(() => {
-		const socket = new WebSocket(`${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/ws`)
-		socketRef.current = socket
-		const send = (msg: ClientMsg) => socket.send(JSON.stringify(msg))
-
-		socket.onopen = () =>
-			send(
-				intent.kind === "join"
-					? { t: "join", code: intent.code, name: intent.name }
-					: { t: intent.kind, game: intent.game, name: intent.name },
-			)
-		socket.onmessage = (event) => {
-			// A message that fails the schema means client and server are out of step. Let it throw.
-			const msg = serverMsg.parse(JSON.parse(String(event.data)))
+		const url = `${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/ws`
+		const initial: ClientMsg =
+			intent.kind === "join"
+				? { t: "join", code: intent.code, name: intent.name }
+				: { t: intent.kind, game: intent.game, name: intent.name }
+		const receive = (msg: ReturnType<typeof serverMsg.parse>) => {
 			if (msg.t === "state") {
 				clockOffset.current = msg.serverNow - Date.now()
 				setSnap(msg)
@@ -59,6 +55,24 @@ export function useOnlineGame(intent: Intent): OnlineGame {
 			} else if (SOFT.includes(msg.code)) setNotice(msg.message)
 			else setFatal(msg.message)
 		}
+		if (distributed) {
+			const connection = connectRealtime({
+				url,
+				initial,
+				onMessage: receive,
+				onConnection: (connected) => setLost(!connected),
+				onFatal: () => setFatal("Could not reach the server."),
+			})
+			realtimeRef.current = connection
+			return () => {
+				realtimeRef.current = null
+				connection.close()
+			}
+		}
+		const socket = new WebSocket(url)
+		socketRef.current = socket
+		socket.onopen = () => socket.send(JSON.stringify(initial))
+		socket.onmessage = (event) => receive(serverMsg.parse(JSON.parse(String(event.data))))
 		socket.onclose = () => setLost(true)
 
 		return () => {
@@ -69,15 +83,21 @@ export function useOnlineGame(intent: Intent): OnlineGame {
 		// The intent is fixed for the life of the screen that mounts this hook.
 	}, [])
 
-	const send = (msg: ClientMsg) => socketRef.current?.send(JSON.stringify(msg))
+	const send = (msg: ClientMsg) => {
+		if (distributed) realtimeRef.current?.send(msg)
+		else if (socketRef.current?.readyState === WebSocket.OPEN) socketRef.current.send(JSON.stringify(msg))
+	}
 
-	if (!snap) return { room: null, session: null, fatal: fatal ?? (lost ? "Could not reach the server." : null) }
+	if (fatal) return { room: null, session: null, fatal }
+
+	if (!snap)
+		return { room: null, session: null, fatal: fatal ?? (!distributed && lost ? "Could not reach the server." : null) }
 
 	const game = findGame(snap.game)
 	if (!game) throw new Error(`Server sent a game this client does not have: ${snap.game}`)
 
 	if (snap.view === null) {
-		const canStart = snap.seat === 0 && snap.names.length >= game.players.min
+		const canStart = !lost && snap.seat === 0 && snap.names.length >= game.players.min
 		return {
 			room: {
 				code: snap.code,
@@ -87,7 +107,7 @@ export function useOnlineGame(intent: Intent): OnlineGame {
 				start: canStart ? () => send({ t: "start" }) : null,
 			},
 			session: null,
-			fatal: lost ? "Lost the connection to the server." : fatal,
+			fatal: !distributed && lost ? "Lost the connection to the server." : fatal,
 		}
 	}
 
@@ -99,7 +119,7 @@ export function useOnlineGame(intent: Intent): OnlineGame {
 
 	return {
 		room: null,
-		fatal: null,
+		fatal,
 		session: {
 			chat: dead ? null : { entries: snap.chat, send: (text) => send({ t: "chat", text }) },
 			game,
@@ -128,7 +148,9 @@ export function useOnlineGame(intent: Intent): OnlineGame {
 					? "Your rival left the circle."
 					: "A mage left the circle. The game is called off."
 				: lost
-					? "Lost the connection to the server."
+					? distributed
+						? "Reconnecting to the table…"
+						: "Lost the connection to the server."
 					: notice,
 		},
 	}

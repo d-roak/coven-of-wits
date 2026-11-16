@@ -1,6 +1,6 @@
-import { type AnyGame, type GameDef, illegal, parseWith, pick, shuffle, topSeats } from "../../game"
+import { type AnyGame, type GameDef, illegal, parseWith, pick, shuffle, topSeats } from "../../game.js"
 import { z } from "zod"
-import { type DevilEntry, roundOf, type TrialMove, type TrialView, type TrialChoice, type TrialForm } from "./trial"
+import { type DevilEntry, roundOf, type TrialMove, type TrialView, type TrialChoice, type TrialForm } from "./trial.js"
 
 interface RockBid {
 	weight: number

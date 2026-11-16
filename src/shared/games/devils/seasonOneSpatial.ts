@@ -1,5 +1,5 @@
-import { type GameDef, type Outcome, illegal, pick, shuffle, topSeats } from "../../game"
-import { roundOf, type TrialMove, type TrialView } from "./trial"
+import { type GameDef, type Outcome, illegal, pick, shuffle, topSeats } from "../../game.js"
+import { roundOf, type TrialMove, type TrialView } from "./trial.js"
 import {
 	blank,
 	choice,
@@ -10,7 +10,7 @@ import {
 	rotateShape,
 	shapeCells,
 	view,
-} from "./seasonOneSupport"
+} from "./seasonOneSupport.js"
 
 export const GRASS_SIZE = 10
 export const GRASS_SHAPES: readonly (readonly (readonly [number, number])[])[] = [

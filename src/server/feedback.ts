@@ -3,12 +3,15 @@ import { isIP } from "node:net"
 import { resolve } from "node:path"
 import { getConnInfo } from "@hono/node-server/conninfo"
 import { Hono, type Context } from "hono"
-import { feedbackReport, FEEDBACK_SCREENSHOT_MAX, GITHUB_REPOSITORY, type FeedbackReport } from "../shared/community"
-import { boundedText, FeedbackError, githubFeedback } from "./feedbackGithub"
-import { jpegBytes } from "./feedbackImage"
-import { receiptStore, type FeedbackReceipt } from "./feedbackStore"
+import { feedbackReport, FEEDBACK_SCREENSHOT_MAX, GITHUB_REPOSITORY, type FeedbackReport } from "../shared/community.js"
+import { boundedText, FeedbackError, githubFeedback } from "./feedbackGithub.js"
+import { jpegBytes } from "./feedbackImage.js"
+import { receiptStore, redisReceiptStore, type FeedbackReceipt } from "./feedbackStore.js"
+import { createRedis, type Redis } from "./redis.js"
 
 export interface FeedbackOptions {
+	redis?: Redis | null
+	vercel?: boolean
 	repo?: string
 	token?: string
 	publicOrigin?: string
@@ -38,6 +41,24 @@ function admission(now: () => number, window: number, perAddress: number, global
 		addresses.set(key, bucket)
 	}
 }
+const LIMIT_ADMISSION = `
+local address = tonumber(redis.call('GET', KEYS[1]) or '0')
+local total = tonumber(redis.call('GET', KEYS[2]) or '0')
+if address >= tonumber(ARGV[2]) or total >= tonumber(ARGV[3]) then return 0 end
+if redis.call('INCR', KEYS[1]) == 1 then redis.call('PEXPIRE', KEYS[1], ARGV[1]) end
+if redis.call('INCR', KEYS[2]) == 1 then redis.call('PEXPIRE', KEYS[2], ARGV[1]) end
+return 1
+`
+function redisAdmission(redis: Redis, prefix: string, window: number, perAddress: number, globalMax: number) {
+	return async (ip: string) => {
+		const allowed = await redis.eval<number>(
+			LIMIT_ADMISSION,
+			[`${prefix}:${digest(ip)}`, `${prefix}:global`],
+			[window, perAddress, globalMax],
+		)
+		if (allowed !== 1) throw new FeedbackError("RATE_LIMITED", 429, "Too many reports. Wait before trying again.")
+	}
+}
 export function createFeedbackRoutes(options: FeedbackOptions = {}) {
 	const repo = (options.repo ?? process.env.GITHUB_FEEDBACK_REPO ?? GITHUB_REPOSITORY).trim()
 	const token = (options.token ?? process.env.GITHUB_FEEDBACK_TOKEN ?? "").trim()
@@ -62,14 +83,25 @@ export function createFeedbackRoutes(options: FeedbackOptions = {}) {
 			throw new Error("PUBLIC_ORIGIN must be an HTTP(S) origin without a path")
 		publicOrigin = parsed.origin
 	}
-	const enabled = Boolean(repo && token)
+	const redis = options.redis === undefined ? createRedis() : options.redis
+	const vercel = options.vercel ?? Boolean(process.env.VERCEL)
+	const enabled = Boolean(repo && token && (!vercel || redis))
 	const timeoutMs = options.timeoutMs ?? 8000
 	if (!Number.isInteger(timeoutMs) || timeoutMs < 1 || timeoutMs > 10000)
 		throw new Error("Feedback timeout must be 1–10000 ms")
 	const now = options.now ?? Date.now
-	const attempts = admission(now, 60_000, 20, 100)
-	const reports = admission(now, 3_600_000, 5, 30)
-	const store = receiptStore(resolve(options.dataDir ?? process.env.FEEDBACK_DATA_DIR ?? ".feedback-data"))
+	const prefix = `coven:feedback:${digest(repo)}`
+	const attempts = redis
+		? redisAdmission(redis, `${prefix}:attempts`, 60_000, 20, 100)
+		: admission(now, 60_000, 20, 100)
+	const reports = redis
+		? redisAdmission(redis, `${prefix}:reports`, 3_600_000, 5, 30)
+		: admission(now, 3_600_000, 5, 30)
+	const disk =
+		!redis && !vercel
+			? receiptStore(resolve(options.dataDir ?? process.env.FEEDBACK_DATA_DIR ?? ".feedback-data"))
+			: null
+	const shared = redis ? redisReceiptStore(redis, prefix) : null
 	const github = githubFeedback({ repo, token, fetch: options.fetch ?? fetch, timeoutMs })
 	const clientIP = options.getClientIP ?? ((c: Context) => getConnInfo(c).remote.address)
 	const flights = new Map<string, { hash: string; promise: Promise<string> }>()
@@ -80,47 +112,61 @@ export function createFeedbackRoutes(options: FeedbackOptions = {}) {
 		return c.json({ githubUrl: repo ? `https://github.com/${repo}` : null, feedbackEnabled: enabled })
 	})
 	async function deliver(report: FeedbackReport, hash: string, ip: string, image?: Buffer): Promise<string> {
-		let receipt = await store.read(report.id)
-		if (receipt && (receipt.hash !== hash || receipt.repo !== repo || receipt.id !== report.id))
-			throw new FeedbackError("ID_CONFLICT", 409, "This report ID belongs to different feedback. Start a new report.")
-		if (receipt?.status === "complete") {
-			if (!receipt.issueUrl?.startsWith(`https://github.com/${repo}/issues/`))
-				throw new Error("Invalid stored issue URL")
-			return receipt.issueUrl
-		}
-		if (receipt?.status === "uncertain") {
-			const issueUrl = await github.reconcile(receipt)
-			if (!issueUrl)
-				throw new FeedbackError(
-					"DELIVERY_PENDING",
-					503,
-					"GitHub has not confirmed this report yet. Retry the same report later.",
-				)
-			await store.save({ ...receipt, status: "complete", issueUrl })
-			return issueUrl
-		}
-		if (!receipt) {
-			reports(ip)
-			receipt = { id: report.id, repo, hash, createdAt: now(), status: "prepared" } satisfies FeedbackReceipt
-			await store.save(receipt)
-		}
-		const imageUrl = image ? await github.screenshot(report.id, image) : undefined
-		// Persist before POST: a crash or lost response must reconcile, never issue a blind second POST.
-		await store.save({ ...receipt, status: "uncertain" })
+		const lease = shared ? await shared.acquire(report.id) : null
 		try {
-			const issueUrl = await github.create(report, imageUrl)
-			await store.save({ ...receipt, status: "complete", issueUrl })
-			return issueUrl
-		} catch (error) {
-			if (error instanceof FeedbackError && error.retrySafe) {
-				await store.save(receipt)
-				throw error
+			const store =
+				lease ??
+				(disk
+					? {
+							read: () => disk.read(report.id),
+							save: (receipt: FeedbackReceipt) => disk.save(receipt),
+						}
+					: null)
+			if (!store) throw new Error("Feedback storage is not configured")
+			let receipt = await store.read()
+			if (receipt && (receipt.hash !== hash || receipt.repo !== repo || receipt.id !== report.id))
+				throw new FeedbackError("ID_CONFLICT", 409, "This report ID belongs to different feedback. Start a new report.")
+			if (receipt?.status === "complete") {
+				if (!receipt.issueUrl?.startsWith(`https://github.com/${repo}/issues/`))
+					throw new Error("Invalid stored issue URL")
+				return receipt.issueUrl
 			}
-			throw new FeedbackError(
-				"DELIVERY_UNCERTAIN",
-				503,
-				"GitHub may have received this report. Retry the same report to check its receipt.",
-			)
+			if (receipt?.status === "uncertain") {
+				const issueUrl = await github.reconcile(receipt)
+				if (!issueUrl)
+					throw new FeedbackError(
+						"DELIVERY_PENDING",
+						503,
+						"GitHub has not confirmed this report yet. Retry the same report later.",
+					)
+				await store.save({ ...receipt, status: "complete", issueUrl })
+				return issueUrl
+			}
+			if (!receipt) {
+				await reports(ip)
+				receipt = { id: report.id, repo, hash, createdAt: now(), status: "prepared" } satisfies FeedbackReceipt
+				await store.save(receipt)
+			}
+			const imageUrl = image ? await github.screenshot(report.id, image) : undefined
+			// Persist before POST: a crash or lost response must reconcile, never issue a blind second POST.
+			await store.save({ ...receipt, status: "uncertain" })
+			try {
+				const issueUrl = await github.create(report, imageUrl)
+				await store.save({ ...receipt, status: "complete", issueUrl })
+				return issueUrl
+			} catch (error) {
+				if (error instanceof FeedbackError && error.retrySafe) {
+					await store.save(receipt)
+					throw error
+				}
+				throw new FeedbackError(
+					"DELIVERY_UNCERTAIN",
+					503,
+					"GitHub may have received this report. Retry the same report to check its receipt.",
+				)
+			}
+		} finally {
+			await lease?.release()
 		}
 	}
 	app.post("/api/feedback", async (c) => {
@@ -134,7 +180,7 @@ export function createFeedbackRoutes(options: FeedbackOptions = {}) {
 			const ip = clientIP(c)
 			if (!ip || !isIP(ip))
 				throw new FeedbackError("CLIENT_UNAVAILABLE", 503, "Feedback could not verify the connection. Try again later.")
-			attempts(ip)
+			await attempts(ip)
 			if (activeRequests >= 4) throw new FeedbackError("BUSY", 429, "Feedback is busy. Retry this report in a moment.")
 			activeRequests++
 			admitted = true

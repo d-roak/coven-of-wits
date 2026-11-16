@@ -1,6 +1,6 @@
-import { type GameDef, illegal, pick, shuffle } from "../../game"
-import { parseTrialMove, type TrialMove, type TrialView } from "./trial"
-import { allowed, at, choice, view, cardPiece, step, numberControl } from "./seasonTwoCommon"
+import { type GameDef, illegal, pick, shuffle } from "../../game.js"
+import { parseTrialMove, type TrialMove, type TrialView } from "./trial.js"
+import { allowed, at, choice, view, cardPiece, step, numberControl } from "./seasonTwoCommon.js"
 
 interface Card {
 	rank: number

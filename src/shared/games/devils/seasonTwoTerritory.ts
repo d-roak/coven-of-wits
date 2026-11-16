@@ -1,6 +1,6 @@
-import { type GameDef, type Outcome } from "../../game"
-import { parseTrialMove, type TrialMove, type TrialView } from "./trial"
-import { allowed, choice, randomAction, result, view, step } from "./seasonTwoCommon"
+import { type GameDef, type Outcome } from "../../game.js"
+import { parseTrialMove, type TrialMove, type TrialView } from "./trial.js"
+import { allowed, choice, randomAction, result, view, step } from "./seasonTwoCommon.js"
 
 const neighbours = (cell: number, size: number) =>
 	[

@@ -1,6 +1,6 @@
 import { z } from "zod"
-import { illegal, pick, type Rng } from "../../game"
-import { parseTrialMove, type TrialChoice, type TrialMove, type TrialView } from "./trial"
+import { illegal, pick, type Rng } from "../../game.js"
+import { parseTrialMove, type TrialChoice, type TrialMove, type TrialView } from "./trial.js"
 
 export function parseActions(...actions: string[]): (raw: unknown) => TrialMove {
 	return (raw) => {

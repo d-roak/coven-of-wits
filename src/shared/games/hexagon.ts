@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { type GameDef, illegal, parseWith, pick } from "../game"
+import { type GameDef, illegal, parseWith, pick } from "../game.js"
 
 export const HEX_CELLS = Array.from({ length: 5 }, (_, row) => row - 2).flatMap((r) =>
 	Array.from({ length: 5 - Math.abs(r) }, (_, col) => ({ q: Math.max(-2, -r - 2) + col, r })),

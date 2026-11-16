@@ -1,6 +1,16 @@
-import { type GameDef, type Outcome, illegal, pick, shuffle } from "../../game"
-import { roundOf, type TrialMove, type TrialView, type TrialPiece, type TrialIcon } from "./trial"
-import { blank, choice, csv, integer, liveSeat, parseActions, rotateShape, shapeCells, view } from "./seasonOneSupport"
+import { type GameDef, type Outcome, illegal, pick, shuffle } from "../../game.js"
+import { roundOf, type TrialMove, type TrialView, type TrialPiece, type TrialIcon } from "./trial.js"
+import {
+	blank,
+	choice,
+	csv,
+	integer,
+	liveSeat,
+	parseActions,
+	rotateShape,
+	shapeCells,
+	view,
+} from "./seasonOneSupport.js"
 
 interface PuzzleState {
 	cells: (number | null)[]

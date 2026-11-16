@@ -1,4 +1,4 @@
-import type { AnyGame } from "./game"
+import type { AnyGame } from "./game.js"
 
 export interface TableClock {
 	startedAt: number

@@ -1,8 +1,8 @@
-import type { AnyGame } from "../../game"
-import type { DevilEntry } from "./trial"
-import { seasonThreePuzzleCatalog, seasonThreePuzzleGames } from "./seasonThreePuzzles"
-import { seasonThreeStrategyCatalog, seasonThreeStrategyGames } from "./seasonThreeStrategy"
-import { createWallGo } from "./seasonTwoTerritory"
+import type { AnyGame } from "../../game.js"
+import type { DevilEntry } from "./trial.js"
+import { seasonThreePuzzleCatalog, seasonThreePuzzleGames } from "./seasonThreePuzzles.js"
+import { seasonThreeStrategyCatalog, seasonThreeStrategyGames } from "./seasonThreeStrategy.js"
+import { createWallGo } from "./seasonTwoTerritory.js"
 
 export const wallGoII = createWallGo({
 	id: "wall-go-ii",

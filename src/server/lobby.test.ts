@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { seededRng } from "../shared/game"
-import { findGame } from "../shared/games"
+import { findGame, games } from "../shared/games"
 import { type EquationHiLoView, equationHiLo } from "../shared/games/equationHiLo"
 import type { ClientMsg, ErrorCode, ServerMsg, StateMsg } from "../shared/protocol"
 import { createLobby } from "./lobby"
@@ -332,4 +332,43 @@ describe("room clocks and private action history", () => {
 		guest.close()
 		expect(host.state()).toMatchObject({ abandoned: true, activity: [], clock: { startedAt: 1000, endedAt: 5000 } })
 	})
+})
+
+it("round-trips every multiplayer engine through persistent snapshots while playing", () => {
+	const rng = seededRng(914)
+	for (const game of games.filter((game) => game.players.max >= 2)) {
+		const count = game.players.min
+		let lobby = createLobby(rng, () => 1000, { rooms: [] })
+		const messages = new Map<string, StateMsg>()
+		const ids = Array.from({ length: count }, (_, seat) => `seat-${seat}`)
+		const reconnect = () =>
+			ids.map((id) =>
+				lobby.connect((msg) => {
+					if (msg.t === "state") messages.set(id, msg)
+				}, id),
+			)
+		let connections = reconnect()
+		connections[0].receive(JSON.stringify({ t: "create", game: game.id, name: "Host" }))
+		const code = messages.get(ids[0])!.code
+		for (let seat = 1; seat < count; seat++)
+			connections[seat].receive(JSON.stringify({ t: "join", code, name: `Player ${seat}` }))
+		if (!messages.get(ids[0])!.view) connections[0].receive(JSON.stringify({ t: "start" }))
+		for (let moves = 0; ; moves++) {
+			const before = ids.map((id) => lobby.state(id))
+			lobby = createLobby(rng, () => 1000, JSON.parse(JSON.stringify(lobby.snapshot())))
+			expect(
+				ids.map((id) => lobby.state(id)),
+				game.id,
+			).toEqual(before)
+			connections = reconnect()
+			const current = before[0]!
+			if (current.t !== "state") throw new Error("Expected a table")
+			if (current.outcome) break
+			expect(moves, game.id).toBeLessThan(1800)
+			const seat = current.toAct[0]
+			const own = before[seat]!
+			if (own.t !== "state") throw new Error("Expected player view")
+			connections[seat].receive(JSON.stringify({ t: "move", move: game.bot!(own.view, seat, rng) }))
+		}
+	}
 })

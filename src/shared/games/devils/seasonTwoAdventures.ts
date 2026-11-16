@@ -1,6 +1,6 @@
-import { type GameDef, type Outcome, pick } from "../../game"
-import { parseTrialMove, type TrialMove, type TrialView } from "./trial"
-import { allowed, at, choice, randomAction, result, view, numberControl, step } from "./seasonTwoCommon"
+import { type GameDef, type Outcome, pick } from "../../game.js"
+import { parseTrialMove, type TrialMove, type TrialView } from "./trial.js"
+import { allowed, at, choice, randomAction, result, view, numberControl, step } from "./seasonTwoCommon.js"
 
 const near = (at: number) =>
 	[at % 5 > 0 ? at - 1 : -1, at % 5 < 4 ? at + 1 : -1, at >= 5 ? at - 5 : -1, at < 20 ? at + 5 : -1].filter(
@@ -261,7 +261,7 @@ export const halloweenMonster: GameDef<MonsterState, TrialMove, TrialView> = {
 			],
 			s.log,
 		)
-		const weaponPiece = (weapon: string): import("./trial").TrialPiece => ({
+		const weaponPiece = (weapon: string): import("./trial.js").TrialPiece => ({
 			kind: "token",
 			icon: weapon === "dagger" ? "sword" : weapon === "grenade" ? "fire" : "vial",
 		})

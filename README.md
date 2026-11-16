@@ -72,7 +72,7 @@ Cards, dice, portrait clues and polyominoes have physical representations. Compo
 
 Every table has turn, round and game clocks. Defaults are 60 seconds per turn, 5 minutes per round and 30 minutes per game. Set your pace changes those personal targets or shows elapsed time only. Clocks show overtime without making moves or forfeiting players. Online timestamps come from the server. Round clocks reset on the game’s public round boundary; sequential actions reset the turn clock, and simultaneous submissions share it. Completed or abandoned games freeze their clocks. Replay starts fresh.
 
-Action history retains the last 200 accepted moves, timestamps and revealed events, with a round filter. Rejected moves and chat do not advance it. Each player’s records come from their filtered view; sealed values and memory-study faces are never copied into history. Recent engine events remain near the board. Rooms and history are in memory and disappear when the session ends.
+Action history retains the last 200 accepted moves, timestamps and revealed events, with a round filter. Rejected moves and chat do not advance it. Each player’s records come from their filtered view; sealed values and memory-study faces are never copied into history. Recent engine events remain near the board. Standalone rooms and history are in memory. In Redis mode they remain available for seat resumption until the room expires.
 
 ## Motion
 
@@ -82,9 +82,9 @@ Boards hold no game state, but they do pace the reveal. `useLinger` (`src/client
 
 Each is marked in the code with a `ponytail:` comment naming the upgrade path.
 
-- No reconnect. A socket dropped mid-game ends the room: a duel is forfeited, a bigger table is called off.
+- The standalone in-memory server ends a room when a socket drops. The Redis-backed Vercel mode reconnects and resumes seats; refreshing or closing the page discards the browser’s session token.
 - No bots online. A 3 to 5 seat game needs that many people in the room.
-- Rooms live in memory in one process. No accounts, ratings or persistence. Chat keeps the last 30 messages per room, at most 240 characters each.
+- The standalone server keeps rooms in memory. Vercel mode stores rooms in Redis and expires tables after 2 hours without an accepted action. Chat keeps the last 30 messages per room, at most 240 characters each. There are no accounts or ratings.
 - Timer expiry is advisory. There are no forced moves or time forfeits.
 - Bots are casual: Turncoat looks one move ahead, Last Candle blunders a quarter of the time on purpose.
 
@@ -103,7 +103,7 @@ Feedback needs a server-side `GITHUB_FEEDBACK_TOKEN` with **Issues: write** and 
 
 Screenshots are committed under `screenshots/` through GitHub's Contents API, then linked in the issue. They have the same visibility as the repository. The app shows the issue link after delivery. Without the token, the reporter supports writing and previewing but disables sending.
 
-Run one API process and keep the receipt directory on persistent storage. Receipts contain report hashes and delivery status, not report text or screenshots. They let a retry recover an issue after a lost response without posting it twice. Per-connection and global rate limits bound anonymous submissions; behind a proxy, connections share the proxy's limit. Multiple API replicas require shared receipts and rate limits first.
+For standalone filesystem feedback, run one API process and keep the receipt directory on persistent storage. Receipts contain report hashes and delivery status, not report text or screenshots. They let a retry recover an issue after a lost response without posting it twice. Per-connection and global rate limits bound anonymous submissions; behind a proxy, connections share the proxy's limit. The Vercel backend uses Redis receipts, owner-fenced delivery leases and atomic shared rate limits across API instances.
 
 ## Contribute
 
@@ -115,9 +115,25 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) for setup, coding conventions and pull r
 
 ## Deploy to Vercel
 
+The Vercel deployment serves the Vite client and a Node HTTP/WebSocket function at `api/server.ts`. Routes `/ws`, `/api/*` and `/health` reach the function. Vercel builds the client with `VITE_DISTRIBUTED_ROOMS=true` to select the resumable transport.
+
+Create an Upstash Redis database through the Vercel Marketplace and connect it to the project’s production environment. Disable eviction and automatic plan upgrades. Set these server-only variables:
+
+- `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` (the Marketplace’s `KV_REST_API_URL` / `KV_REST_API_TOKEN` names also work).
+- `GITHUB_FEEDBACK_TOKEN` with repository-scoped Issues and Contents write permissions to enable issue delivery.
+- `PUBLIC_ORIGIN` only when the request host differs from the public browser origin. Leave it unset to support each deployment’s own hostname.
+
 ```sh
 vercel link --project coven-of-wits
 vercel deploy --prod
 ```
 
-Vercel builds the Vite client. Solo puzzles and bot games run in the browser. Online rooms and feedback require the Node server: run `pnpm build && pnpm start` on a persistent host, then proxy `/ws` and `/api` to that host. Room state and feedback receipts currently assume one server process; deploying them across Vercel function instances requires shared storage and room routing first.
+Without Redis, the function reports unconfigured storage and rejects online connections; feedback delivery stays disabled. Redis credentials and the GitHub token must never use a `VITE_` prefix. `/health` reports whether Redis is configured; multiplayer checks also exercise actual storage reads and writes.
+
+Clients keep an unguessable seat token in memory, send it only over the same-origin WebSocket, and resume automatically after socket rotation. During reconnect, moves pause. A move with an uncertain response is resolved by the next authoritative snapshot, rather than replayed automatically. Explicit Leave ends the seat; a refresh starts a fresh browser session.
+
+Redis stores authoritative game state, player-filtered history and hashed seat tokens. Atomic compare-and-set prevents competing instances from overwriting accepted actions. Request IDs suppress duplicate commands. Tables expire after 2 hours without an accepted action. The current capacity is 100 active tables and a 4 MB serialized room store; increasing it requires per-room storage and matchmaking coordination. Connected sockets check for shared updates every 1.5 seconds, so Redis command usage grows with connected players. Choose provider quotas accordingly.
+
+Feedback uses durable compact receipts and 90-second owner-fenced leases. Receipts retain hashes and issue URLs without report bodies or screenshots. They must remain in non-evicting storage to preserve duplicate prevention. Rate limits are shared across instances. Screenshot uploads remain in the GitHub repository.
+
+For local Redis integration tests, install `redis-server` and `redis-cli`, then run `pnpm check`. The Redis suites start isolated temporary instances; they skip when the binaries are unavailable. Regular `pnpm dev` keeps the standalone in-memory transport.

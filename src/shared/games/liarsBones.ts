@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { type GameDef, type Rng, illegal, parseWith, seededRng } from "../game"
+import { type GameDef, type Rng, illegal, parseWith, seededRng } from "../game.js"
 
 export const START_BONES = 3
 const MAX_PLAYERS = 5

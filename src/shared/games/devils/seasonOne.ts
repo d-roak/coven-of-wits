@@ -1,9 +1,9 @@
-import type { AnyGame } from "../../game"
-import type { DevilEntry } from "./trial"
-import { cooperativePuzzle, fragmentsOfMemory, montage, scaleGame, wordTower } from "./seasonOnePuzzles"
-import { blindGomoku, fourPlayerThree, layingGrass } from "./seasonOneSpatial"
-import { dicePoker, rulesRace, secretNumber, zoo } from "./seasonOneTables"
-import { virusGame } from "./seasonOneVirus"
+import type { AnyGame } from "../../game.js"
+import type { DevilEntry } from "./trial.js"
+import { cooperativePuzzle, fragmentsOfMemory, montage, scaleGame, wordTower } from "./seasonOnePuzzles.js"
+import { blindGomoku, fourPlayerThree, layingGrass } from "./seasonOneSpatial.js"
+import { dicePoker, rulesRace, secretNumber, zoo } from "./seasonOneTables.js"
+import { virusGame } from "./seasonOneVirus.js"
 
 export const seasonOneGames: readonly AnyGame[] = [
 	virusGame,

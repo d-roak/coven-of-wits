@@ -1,5 +1,5 @@
-import { illegal, pick, topSeats, type Outcome, type Rng } from "../../game"
-import { type TrialChoice, roundOf, type TrialMove, type RoundLabel, type TrialView } from "./trial"
+import { illegal, pick, topSeats, type Outcome, type Rng } from "../../game.js"
+import { type TrialChoice, roundOf, type TrialMove, type RoundLabel, type TrialView } from "./trial.js"
 
 export const choice = (label: string, action: string, value: string | number): TrialChoice => ({
 	label,
@@ -81,7 +81,7 @@ export function numberControl(v: TrialView, action: string, label: string, submi
 		},
 	]
 }
-export const cardPiece = (rank: number | string, suit?: number): import("./trial").TrialPiece => ({
+export const cardPiece = (rank: number | string, suit?: number): import("./trial.js").TrialPiece => ({
 	kind: "card",
 	rank: String(rank),
 	...(suit === undefined ? {} : { suit: (["spades", "clubs", "hearts", "diamonds"] as const)[suit] }),
@@ -90,5 +90,5 @@ export const step = (
 	prompt: string,
 	key: string | number,
 	label: string,
-	piece?: import("./trial").TrialPiece,
-): import("./trial").TrialStep => ({ prompt, key: String(key), label, ...(piece ? { piece } : {}) })
+	piece?: import("./trial.js").TrialPiece,
+): import("./trial.js").TrialStep => ({ prompt, key: String(key), label, ...(piece ? { piece } : {}) })

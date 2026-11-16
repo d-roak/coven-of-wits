@@ -104,6 +104,7 @@ export const chrome: Dictionary = {
 	"Your rival left the circle.": "상대가 모임을 떠났어요.",
 	"A mage left the circle. The game is called off.": "마법사 한 명이 모임을 떠나 게임이 취소됐어요.",
 	"Lost the connection to the server.": "서버와 연결이 끊겼어요.",
+	"Reconnecting to the table…": "테이블에 다시 연결하는 중…",
 	"Could not reach the server.": "서버에 연결하지 못했어요.",
 
 	// Errors the server sends (src/server/lobby.ts).

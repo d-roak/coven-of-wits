@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { type GameDef, illegal, parseWith } from "../game"
+import { type GameDef, illegal, parseWith } from "../game.js"
 
 export const SIZE = 6
 

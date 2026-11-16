@@ -1,6 +1,6 @@
-import { type GameDef, type Outcome, illegal, pick, seededRng, shuffle, topSeats } from "../../game"
-import { roundOf, type TrialMove, type TrialView, type TrialIcon, type TrialPiece } from "./trial"
-import { blank, choice, choiceBot, integer, liveSeat, parseActions, selection, view } from "./seasonOneSupport"
+import { type GameDef, type Outcome, illegal, pick, seededRng, shuffle, topSeats } from "../../game.js"
+import { roundOf, type TrialMove, type TrialView, type TrialIcon, type TrialPiece } from "./trial.js"
+import { blank, choice, choiceBot, integer, liveSeat, parseActions, selection, view } from "./seasonOneSupport.js"
 
 const PERSONAL_RULES = [
 	"Whenever anyone is imprisoned, gain an escape ticket.",

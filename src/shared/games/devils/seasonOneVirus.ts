@@ -1,6 +1,6 @@
-import { type GameDef, type Outcome, illegal, pick, shuffle } from "../../game"
-import { roundOf, type TrialMove, type TrialView, type TrialIcon } from "./trial"
-import { blank, choice, integer, liveSeat, parseActions, view } from "./seasonOneSupport"
+import { type GameDef, type Outcome, illegal, pick, shuffle } from "../../game.js"
+import { roundOf, type TrialMove, type TrialView, type TrialIcon } from "./trial.js"
+import { blank, choice, integer, liveSeat, parseActions, view } from "./seasonOneSupport.js"
 
 export const VIRUS_ROLES = ["Hexer", "Researcher", "Officer", "Journalist", "Citizen"] as const
 type VirusRole = (typeof VIRUS_ROLES)[number]

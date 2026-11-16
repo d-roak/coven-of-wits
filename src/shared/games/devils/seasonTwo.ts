@@ -1,12 +1,12 @@
-import type { AnyGame } from "../../game"
-import type { DevilEntry } from "./trial"
-import { balanceMancala, crookedCops, halloweenMonster, treasureIsland } from "./seasonTwoAdventures"
-import { bigOrSmall, doubtAndBet, removeOne, timeAuction } from "./seasonTwoBids"
-import { sniperHoldem, tripleDice } from "./seasonTwoCards"
-import { questionAndTruth } from "./seasonTwoDeduction"
-import { equationPyramid, findTheKey, unknown } from "./seasonTwoPuzzles"
-import { baghChal, wallGo } from "./seasonTwoTerritory"
-import { source } from "./seasonTwoCommon"
+import type { AnyGame } from "../../game.js"
+import type { DevilEntry } from "./trial.js"
+import { balanceMancala, crookedCops, halloweenMonster, treasureIsland } from "./seasonTwoAdventures.js"
+import { bigOrSmall, doubtAndBet, removeOne, timeAuction } from "./seasonTwoBids.js"
+import { sniperHoldem, tripleDice } from "./seasonTwoCards.js"
+import { questionAndTruth } from "./seasonTwoDeduction.js"
+import { equationPyramid, findTheKey, unknown } from "./seasonTwoPuzzles.js"
+import { baghChal, wallGo } from "./seasonTwoTerritory.js"
+import { source } from "./seasonTwoCommon.js"
 
 export const seasonTwoGames: readonly AnyGame[] = [
 	crookedCops,

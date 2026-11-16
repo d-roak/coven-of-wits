@@ -1,6 +1,16 @@
-import { type GameDef, pick, shuffle } from "../../game"
-import { parseTrialMove, type TrialMove, type TrialView } from "./trial"
-import { allowed, at, choice, randomAction, result, selected, view, cardPiece, numberControl } from "./seasonTwoCommon"
+import { type GameDef, pick, shuffle } from "../../game.js"
+import { parseTrialMove, type TrialMove, type TrialView } from "./trial.js"
+import {
+	allowed,
+	at,
+	choice,
+	randomAction,
+	result,
+	selected,
+	view,
+	cardPiece,
+	numberControl,
+} from "./seasonTwoCommon.js"
 
 const HANDS = [
 	"high card",

@@ -1,6 +1,7 @@
-import { type AnyGame, IllegalMove, type Rng } from "../shared/game"
-import { games } from "../shared/games"
-import { CHAT_HISTORY, type ChatEntry, type ErrorCode, type ServerMsg, clientMsg } from "../shared/protocol"
+import { randomUUID } from "node:crypto"
+import { type AnyGame, IllegalMove, type Rng } from "../shared/game.js"
+import { games } from "../shared/games/index.js"
+import { CHAT_HISTORY, type ChatEntry, type ErrorCode, type ServerMsg, clientMsg } from "../shared/protocol.js"
 
 import {
 	ACTION_HISTORY,
@@ -9,7 +10,7 @@ import {
 	startClock,
 	type TableClock,
 	type ActionEntry,
-} from "../shared/tableSession"
+} from "../shared/tableSession.js"
 
 // Rooms and matchmaking. Knows nothing about sockets: a connection is a `send` callback going out
 // and raw strings coming in, so the whole thing can be driven from a test.
@@ -19,12 +20,14 @@ const CODE_LETTERS = "ABCDEFGHJKLMNPQRSTUVWXYZ" // no I or O, they read as 1 and
 const online = games.filter((g) => g.players.max >= 2)
 
 interface Player {
+	id: string
 	send: (msg: ServerMsg) => void
 	name: string
 	room: Room | null
 }
 
 interface Room {
+	touchedAt: number
 	chat: ChatEntry[]
 	code: string
 	game: AnyGame
@@ -46,8 +49,58 @@ export interface Connection {
 	close(): void
 }
 
-export function createLobby(rng: Rng = Math.random, now: () => number = Date.now) {
+export interface LobbySnapshot {
+	rooms: {
+		chat: ChatEntry[]
+		code: string
+		game: string
+		open: boolean
+		seats: { id: string; name: string; active: boolean }[]
+		live: Room["live"]
+		rematch: number[]
+		abandoned: boolean
+		touchedAt: number
+	}[]
+}
+
+export function createLobby(rng: Rng = Math.random, now: () => number = Date.now, snapshot?: LobbySnapshot) {
 	const rooms = new Map<string, Room>()
+	const retired = new Set<Room>()
+	const players = new Map<string, Player>()
+	for (const saved of snapshot?.rooms ?? []) {
+		const game = online.find((candidate) => candidate.id === saved.game)
+		if (!game) throw new Error(`Stored room has unknown game: ${saved.game}`)
+		const room: Room = { ...saved, game, seats: [], rematch: new Set() }
+		room.seats = saved.seats.map((seat) => {
+			const player: Player = { id: seat.id, name: seat.name, room: seat.active ? room : null, send: () => {} }
+			if (seat.active) players.set(player.id, player)
+			return player
+		})
+		room.rematch = new Set(saved.rematch.map((seat) => room.seats[seat]))
+		if (room.abandoned) retired.add(room)
+		else rooms.set(room.code, room)
+	}
+
+	function snapshotRoom(room: Room, player: Player): ServerMsg {
+		const seat = room.seats.indexOf(player)
+		const state = room.live?.state
+		return {
+			t: "state",
+			code: room.code,
+			game: room.game.id,
+			seat,
+			names: room.seats.map((p) => p.name),
+			view: room.live ? room.game.view(state, seat) : null,
+			toAct: room.live && !room.abandoned ? room.game.toAct(state) : [],
+			outcome: room.live ? room.game.outcome(state) : null,
+			rematch: room.seats.flatMap((p, i) => (room.rematch.has(p) ? [i] : [])),
+			abandoned: room.abandoned,
+			chat: room.chat,
+			clock: room.live?.clock ?? null,
+			serverNow: now(),
+			activity: room.live?.activity[seat] ?? [],
+		}
+	}
 
 	function newCode(): string {
 		for (;;) {
@@ -57,26 +110,9 @@ export function createLobby(rng: Rng = Math.random, now: () => number = Date.now
 	}
 
 	function broadcast(room: Room) {
-		room.seats.forEach((player, seat) => {
-			// A player who left has room set to null and no socket worth writing to.
-			if (player.room !== room) return
-			const state = room.live?.state
-			player.send({
-				t: "state",
-				code: room.code,
-				game: room.game.id,
-				seat,
-				names: room.seats.map((p) => p.name),
-				view: room.live ? room.game.view(state, seat) : null,
-				toAct: room.live && !room.abandoned ? room.game.toAct(state) : [],
-				outcome: room.live ? room.game.outcome(state) : null,
-				rematch: room.seats.flatMap((p, i) => (room.rematch.has(p) ? [i] : [])),
-				abandoned: room.abandoned,
-				chat: room.chat,
-				clock: room.live?.clock ?? null,
-				serverNow: now(),
-				activity: room.live?.activity[seat] ?? [],
-			})
+		room.touchedAt = now()
+		room.seats.forEach((player) => {
+			if (player.room === room) player.send(snapshotRoom(room, player))
 		})
 	}
 
@@ -94,8 +130,10 @@ export function createLobby(rng: Rng = Math.random, now: () => number = Date.now
 		else broadcast(room)
 	}
 
-	function connect(send: Player["send"]): Connection {
-		const player: Player = { send, name: "", room: null }
+	function connect(send: Player["send"], id: string = randomUUID()): Connection {
+		const player: Player = players.get(id) ?? { id, send, name: "", room: null }
+		player.send = send
+		players.set(id, player)
 		const fail = (code: ErrorCode, message: string) => send({ t: "error", code, message })
 
 		function open(gameId: string, isOpen: boolean) {
@@ -103,6 +141,7 @@ export function createLobby(rng: Rng = Math.random, now: () => number = Date.now
 			if (!game) return fail("UNKNOWN_GAME", `No such online game. Known: ${online.map((g) => g.id).join(", ")}.`)
 			if (rooms.size >= MAX_ROOMS) return fail("SERVER_FULL", "The grove is full. Try again in a minute.")
 			const room: Room = {
+				touchedAt: now(),
 				chat: [],
 				code: newCode(),
 				game,
@@ -200,6 +239,7 @@ export function createLobby(rng: Rng = Math.random, now: () => number = Date.now
 		}
 
 		function close() {
+			players.delete(player.id)
 			const room = player.room
 			if (!room) return
 			player.room = null
@@ -212,6 +252,7 @@ export function createLobby(rng: Rng = Math.random, now: () => number = Date.now
 			// ponytail: no reconnect. A socket dropped mid-game ends the room for everyone.
 			// Add session tokens and a grace period when it hurts.
 			rooms.delete(room.code)
+			if (snapshot) retired.add(room)
 			room.abandoned = true
 			if (room.live) room.live.clock = { ...room.live.clock, endedAt: room.live.clock.endedAt ?? now() }
 			broadcast(room)
@@ -220,5 +261,25 @@ export function createLobby(rng: Rng = Math.random, now: () => number = Date.now
 		return { receive, close }
 	}
 
-	return { connect, roomCount: () => rooms.size }
+	return {
+		connect,
+		roomCount: () => rooms.size,
+		state: (id: string): ServerMsg | null => {
+			const player = players.get(id)
+			return player?.room ? snapshotRoom(player.room, player) : null
+		},
+		snapshot: (): LobbySnapshot => ({
+			rooms: [...rooms.values(), ...retired].map((room) => ({
+				chat: room.chat,
+				code: room.code,
+				game: room.game.id,
+				open: room.open,
+				seats: room.seats.map((player) => ({ id: player.id, name: player.name, active: player.room === room })),
+				live: room.live,
+				rematch: [...room.rematch].map((player) => room.seats.indexOf(player)),
+				abandoned: room.abandoned,
+				touchedAt: room.touchedAt,
+			})),
+		}),
+	}
 }
