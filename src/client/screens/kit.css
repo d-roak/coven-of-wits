@@ -1,0 +1,40 @@
+.kit {
+	display: grid;
+	gap: 2.2rem;
+	padding: 1.5rem;
+	color: var(--ink);
+	background: var(--paper);
+	border: 3px solid var(--ink);
+	border-radius: var(--radius);
+}
+.kit h1,
+.kit h2 {
+	font-family: var(--font-display);
+}
+.kit section {
+	display: grid;
+	gap: 0.8rem;
+}
+.kit .piece-row {
+	justify-content: flex-start;
+}
+.kit-games {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+	gap: 1rem;
+}
+.kit-games article {
+	display: grid;
+	gap: 0.6rem;
+	align-content: start;
+	padding: 0.9rem;
+	background: var(--panel);
+	border-radius: var(--radius-s);
+}
+.kit-games h3 {
+	font: 900 1rem var(--font-body);
+}
+.kit-games .playing-card {
+	width: 52px;
+	height: 74px;
+}

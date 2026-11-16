@@ -1,0 +1,2673 @@
+/* Tokens. Every colour in the app comes from here, including the SVG art. */
+:root {
+	/* Ink, parchment and a candlelit forest. */
+	--ink: #292b28;
+	--paper: #f3e7cb;
+	--paper-dim: #dfcfaa;
+	--sky-top: #283d35;
+	--sky-low: #354c3e;
+	--cloud: #97a183;
+	--sun: #e3c680;
+	--hill-1: #304b3c;
+	--hill-2: #263d33;
+	--hill-3: #1e3029;
+	--tree: #1e3029;
+
+	/* Sage game boards with moss-coloured recesses. */
+	--panel: #d8ddbf;
+	--panel-deep: #b9c8a5;
+	--pit: #91a582;
+	--grass: #b6c49b;
+
+	/* Seat colours. Seat N uses the Nth one everywhere: mage, pieces, name tag. */
+	--ember: #cc7965;
+	--moon: #8bbeb1;
+	--moss: #a6ba7d;
+	--grape: #b5a1bc;
+	--brook: #91b2bb;
+	/* Dark enough for paper-coloured text at 4.5:1. Buttons only. */
+	--ember-deep: #ad493d;
+	--gold: #dfba6e;
+	--pink: #d89583;
+	--glint: #fff6df;
+
+	--fur-cream: #f3e7cb;
+	--fur-mint: #e1e9d2;
+	--fur-butter: #eee0b5;
+	--fur-rose: #eed9c9;
+	--fur-lilac: #e0d8db;
+
+	--font-display: "Caprasimo", Georgia, serif;
+	--font-body: "Nunito Variable", system-ui, sans-serif;
+	--line: 4px;
+	/* Slightly uneven corners, so panels look cut by hand. One scale for the whole app. */
+	--radius: 16px 20px 17px 21px / 20px 16px 21px 17px;
+	--radius-s: 13px 15px 13px 16px / 15px 13px 16px 13px;
+	--drop: 0 6px 0 var(--ink);
+	--halo: rgb(from var(--ink) r g b / 0.04);
+	--ease: cubic-bezier(0.16, 1, 0.3, 1);
+	/* Overshoots a little. For things that land: pieces, cards, mages. */
+	--spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+	--board: min(100%, 30rem);
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	background: var(--hill-3);
+}
+
+body {
+	margin: 0;
+	min-height: 100dvh;
+	color: var(--paper);
+	background: linear-gradient(var(--sky-top), var(--sky-low) 70%);
+	background-attachment: fixed;
+	font: 600 1rem/1.5 var(--font-body);
+}
+
+/* Paper grain over everything. */
+body::after {
+	content: "";
+	position: fixed;
+	inset: 0;
+	z-index: 5;
+	pointer-events: none;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 .27 0 0 0 0 .16 0 0 0 0 .23 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+	opacity: 0.1;
+	mix-blend-mode: multiply;
+}
+
+h1,
+h2,
+h3,
+p {
+	margin: 0;
+}
+h1,
+h2,
+h3 {
+	font-weight: 400;
+}
+button,
+input {
+	font: inherit;
+	color: inherit;
+}
+:focus-visible {
+	outline: 3px solid var(--gold);
+	outline-offset: 3px;
+}
+
+/* ---------- backdrop ---------- */
+.scene {
+	position: fixed;
+	inset: 0;
+	overflow: hidden;
+	pointer-events: none;
+}
+
+.scene-clouds {
+	position: absolute;
+	inset: 3vh 0 auto 0;
+	width: 100%;
+	height: 26vh;
+	fill: var(--cloud);
+}
+.scene-land {
+	position: absolute;
+	inset: auto 0 0 0;
+	width: 100%;
+	height: 36vh;
+}
+.scene-hill-1 {
+	fill: var(--hill-1);
+}
+.scene-hill-2 {
+	fill: var(--hill-2);
+}
+.scene-hill-3 {
+	fill: var(--hill-3);
+}
+.scene-tree {
+	fill: var(--tree);
+}
+.scene-stalk,
+.scene-dot {
+	fill: var(--paper);
+}
+.scene-cap {
+	fill: var(--ember);
+}
+
+.app {
+	position: relative;
+	/* Keeps a child's top margin inside, so the language switch stays pinned to the corner. */
+	display: flow-root;
+	max-width: 76rem;
+	margin: 0 auto;
+	padding: 0 1.5rem 4rem;
+}
+
+/* Every screen arrives the same way. */
+.home,
+.table,
+.waiting {
+	animation: enter 0.5s var(--ease);
+}
+
+/* ---------- shared pieces ---------- */
+.seat0 {
+	--c: var(--ember);
+}
+.seat1 {
+	--c: var(--moon);
+}
+.seat2 {
+	--c: var(--moss);
+}
+.seat3 {
+	--c: var(--grape);
+}
+.seat4 {
+	--c: var(--brook);
+}
+
+/* Piece glyphs (art/Glyph.tsx): outline by default, .t tinted body, .s solid ink. */
+.glyph {
+	flex: none;
+	width: 1em;
+	height: 1em;
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 2;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+.glyph .t {
+	fill: currentColor;
+	fill-opacity: 0.2;
+}
+.glyph .s {
+	fill: currentColor;
+	stroke: none;
+}
+
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.4rem;
+	padding: 0.45rem 0.75rem;
+	font-size: 0.92rem;
+	font-weight: 800;
+	white-space: nowrap;
+	text-decoration: none;
+	color: var(--paper);
+	background: var(--ember-deep);
+	border: 3px solid var(--ink);
+	border-radius: var(--radius-s);
+	box-shadow: 0 4px 0 var(--ink);
+	cursor: pointer;
+	transition:
+		transform 0.18s var(--spring),
+		box-shadow 0.18s var(--ease);
+}
+.btn:hover:not(:disabled) {
+	transform: translateY(-2px) rotate(-1deg);
+	box-shadow: 0 6px 0 var(--ink);
+}
+.btn:active:not(:disabled) {
+	transform: translateY(4px) scale(0.97);
+	box-shadow: 0 0 0 var(--ink);
+}
+.btn:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+.btn.is-ghost {
+	color: var(--ink);
+	background: var(--paper);
+}
+.btn.is-moon {
+	color: var(--ink);
+	background: var(--moon);
+}
+.btn-row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: inherit;
+	gap: 0.55rem;
+}
+
+.orb {
+	display: block;
+	aspect-ratio: 1;
+	border-radius: 50%;
+	background: var(--c);
+	border: 3px solid var(--ink);
+	box-shadow:
+		inset -4px -5px 0 rgb(from var(--ink) r g b / 0.16),
+		inset 3px 3px 0 rgb(from var(--glint) r g b / 0.45);
+}
+.orb.is-winning {
+	animation: throb 0.7s ease-in-out infinite alternate;
+}
+
+.card {
+	display: grid;
+	place-items: center;
+	width: 3.1rem;
+	aspect-ratio: 5 / 7;
+	padding: 0;
+	font: 400 1.7rem/1 var(--font-display);
+	color: var(--ink);
+	background: linear-gradient(var(--c, var(--paper-dim)) 0 20%, var(--paper) 20%);
+	border: 3px solid var(--ink);
+	border-radius: var(--radius-s);
+	box-shadow: 0 4px 0 var(--ink);
+}
+button.card {
+	cursor: pointer;
+	transition: transform 0.25s var(--spring);
+}
+button.card:hover:not(:disabled) {
+	transform: translateY(-8px) rotate(-3deg);
+}
+button.card:disabled {
+	cursor: default;
+}
+.card.is-chosen {
+	transform: translateY(-12px);
+	outline: 3px solid var(--gold);
+}
+.card.is-back {
+	background: repeating-linear-gradient(45deg, var(--c) 0 7px, var(--paper) 7px 10px);
+}
+.card.is-empty,
+.spark.is-empty {
+	background: none;
+	border: 3px dashed rgb(from var(--ink) r g b / 0.3);
+	box-shadow: none;
+}
+.card.is-prize {
+	width: 4.1rem;
+	font-size: 2.3rem;
+	background: var(--gold);
+	animation: flip 0.6s var(--spring);
+}
+.card.is-prize.is-spent {
+	opacity: 0.55;
+	animation: none;
+}
+
+/* A spark: the round token of Lone Spark. */
+.spark {
+	display: grid;
+	place-items: center;
+	width: 3.2rem;
+	aspect-ratio: 1;
+	padding: 0;
+	font: 400 1.6rem/1 var(--font-display);
+	color: var(--ink);
+	background: var(--c, var(--gold));
+	border: 3px solid var(--ink);
+	border-radius: 50%;
+	box-shadow: 0 4px 0 var(--ink);
+}
+.spark.is-sealed {
+	background: repeating-linear-gradient(45deg, var(--c) 0 7px, var(--paper) 7px 10px);
+}
+.spark.is-fizzled {
+	opacity: 0.4;
+	filter: grayscale(0.7);
+}
+
+/* Shared by cards and sparks: put down, turned over, turned out to be the winner. */
+.is-placed {
+	animation: place 0.4s var(--spring);
+}
+.is-flipping {
+	animation: flip 0.55s var(--spring);
+}
+.is-flipping.is-winning {
+	animation:
+		flip 0.55s var(--spring),
+		throb 0.6s 0.7s ease-in-out infinite alternate;
+}
+
+.die {
+	flex: none;
+	animation: tumble 0.65s var(--spring) backwards;
+}
+.die:nth-child(2) {
+	animation-delay: 80ms;
+}
+.die:nth-child(3) {
+	animation-delay: 160ms;
+}
+.die-body {
+	fill: var(--paper);
+	stroke: var(--ink);
+	stroke-width: 3;
+}
+.die.is-hidden .die-body {
+	fill: var(--c, var(--paper-dim));
+}
+.die-pip {
+	fill: var(--ink);
+}
+.die-swirl {
+	fill: none;
+	stroke: var(--ink);
+	stroke-width: 2.4;
+	stroke-linecap: round;
+	opacity: 0.55;
+}
+.die.is-hit .die-body {
+	fill: var(--gold);
+}
+.die.is-miss {
+	opacity: 0.45;
+}
+
+.tally {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	font: 400 1.35rem/1 var(--font-display);
+}
+.tally-orb {
+	width: 1.3rem;
+	margin-left: 0.6rem;
+}
+
+/* ---------- poff ---------- */
+.poff {
+	flex: none;
+	overflow: visible;
+}
+.poff-shadow {
+	fill: var(--ink);
+	opacity: 0.13;
+}
+.poff-body {
+	transform-origin: 50% 100%;
+	animation: breathe 2.8s ease-in-out infinite;
+}
+.poff-outline {
+	fill: var(--ink);
+	stroke: var(--ink);
+	stroke-width: 7;
+}
+.poff-fur {
+	fill: var(--fur);
+}
+.poff-ink {
+	fill: var(--ink);
+}
+.poff-line {
+	fill: none;
+	stroke: var(--ink);
+	stroke-width: 2.8;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+.poff-tuft {
+	fill: none;
+	stroke: var(--ink);
+	stroke-width: 2.4;
+	stroke-linecap: round;
+	opacity: 0.16;
+}
+.poff-glint {
+	fill: var(--glint);
+}
+.poff-blush {
+	fill: var(--pink);
+	opacity: 0.9;
+}
+.poff-tear {
+	fill: var(--brook);
+	stroke: var(--ink);
+	stroke-width: 1.5;
+}
+.poff-hat,
+.poff-scarf {
+	fill: var(--hat);
+	stroke: var(--ink);
+	stroke-width: 3.5;
+	stroke-linejoin: round;
+}
+.poff-band {
+	fill: var(--gold);
+	stroke: var(--ink);
+	stroke-width: 2.5;
+	stroke-linejoin: round;
+}
+.poff-hat-group {
+	transform: rotate(-7deg);
+	transform-origin: 60px 62px;
+}
+/* A mage whose turn it is tips its hat back and forth while it thinks. */
+.poff.is-think .poff-hat-group {
+	animation: ponder 1.5s ease-in-out infinite alternate;
+}
+.poff-eyes {
+	transform-box: fill-box;
+	transform-origin: center;
+	animation: blink 4.4s infinite;
+}
+
+/* ---------- runes ---------- */
+.rune {
+	flex: none;
+}
+.rune-stone {
+	fill: var(--rune);
+	stroke: var(--ink);
+	stroke-width: 2.5;
+	stroke-linejoin: round;
+}
+.rune-glyph {
+	fill: none;
+	stroke: var(--ink);
+	stroke-width: 3;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+.rune-0 {
+	--rune: var(--ember);
+}
+.rune-1 {
+	--rune: var(--moon);
+}
+.rune-2 {
+	--rune: var(--gold);
+}
+.rune-3 {
+	--rune: var(--grape);
+}
+.rune-4 {
+	--rune: var(--moss);
+}
+.rune-5 {
+	--rune: var(--pink);
+}
+
+/* ---------- home ---------- */
+.masthead {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	min-height: 76px;
+	border-bottom: 1px solid rgb(from var(--paper) r g b / 0.22);
+}
+.masthead a {
+	color: var(--paper);
+	text-decoration: none;
+}
+.masthead a:hover {
+	color: var(--gold);
+}
+.wordmark {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	font-family: var(--font-display);
+	font-size: 1.1rem;
+}
+.masthead > div {
+	display: flex;
+	gap: 1.8rem;
+	font-size: 0.86rem;
+}
+.hero {
+	display: grid;
+	grid-template-columns: 1fr 1.1fr;
+	gap: 1rem;
+	align-items: center;
+	padding: 2rem 0 1.5rem;
+}
+.hero-kicker {
+	font-size: 0.72rem;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	color: var(--gold);
+	margin-bottom: 1rem;
+}
+.title {
+	font: 400 clamp(3.1rem, 6.8vw, 5.8rem)/1.02 var(--font-display);
+	letter-spacing: -0.04em;
+	max-width: 7ch;
+}
+.title em {
+	font-style: normal;
+	color: var(--gold);
+}
+.tagline {
+	max-width: 36ch;
+	margin: 1.25rem 0 1.5rem;
+	font-size: 1.05rem;
+	color: var(--paper);
+}
+.hero-link {
+	padding: 0.7rem 1.1rem;
+}
+.hero-cast {
+	min-width: 0;
+}
+.coven-art {
+	display: block;
+	width: 100%;
+	height: auto;
+	overflow: visible;
+}
+.ticket {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	width: 100%;
+	padding: 1.15rem 1.4rem;
+	color: var(--ink);
+	background: var(--paper);
+	border: 3px solid var(--ink);
+	border-radius: var(--radius);
+	box-shadow: var(--drop);
+	scroll-margin-top: 1rem;
+}
+.ticket-intro {
+	display: flex;
+	gap: 0.7rem;
+	align-items: center;
+	font-size: 1rem;
+	font-weight: 800;
+}
+.ticket-intro small {
+	display: block;
+	font-size: 0.8rem;
+	font-weight: 600;
+}
+.join {
+	display: flex;
+	align-items: end;
+	gap: 0.6rem;
+}
+.field {
+	display: grid;
+	gap: 0.2rem;
+	font-size: 0.65rem;
+	font-weight: 800;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+.field input {
+	width: 10rem;
+	padding: 0.4rem 0.65rem;
+	font-size: 1rem;
+	font-weight: 800;
+	background: var(--glint);
+	border: 2px solid var(--ink);
+	border-radius: var(--radius-s);
+}
+.field .code-input {
+	width: 6.2rem;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+}
+.devils-collection {
+	margin-top: 3.5rem;
+	scroll-margin-top: 1.5rem;
+}
+.collection-heading {
+	display: flex;
+	gap: 0.9rem;
+	align-items: center;
+	margin-bottom: 1.4rem;
+}
+.collection-heading > svg {
+	color: var(--gold);
+	flex: none;
+}
+.collection-heading h2,
+.shelf h2 {
+	font: 400 clamp(1.7rem, 3.4vw, 2.2rem)/1.15 var(--font-display);
+}
+.collection-heading p,
+.shelf-note {
+	margin-top: 0.4rem;
+	font-size: 0.95rem;
+}
+.adaptation-note {
+	margin-top: 1rem;
+	color: var(--paper);
+	opacity: 0.8;
+	font-size: 0.78rem;
+}
+.shelf {
+	margin-top: 3.3rem;
+}
+.shelf-note {
+	margin-bottom: 1.3rem;
+}
+.games {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(min(100%, 25rem), 1fr));
+	gap: 1.25rem;
+}
+.game-card {
+	display: grid;
+	gap: 0.8rem;
+	align-content: start;
+	padding: 1.3rem 1.4rem;
+	color: var(--ink);
+	background: var(--paper);
+	border: 3px solid var(--ink);
+	border-radius: var(--radius);
+	box-shadow: var(--drop);
+	animation: enter 0.45s var(--ease) backwards;
+	animation-delay: calc(var(--i) * 50ms);
+	transition: transform 0.2s var(--ease);
+}
+.game-card:hover {
+	transform: translateY(-3px);
+}
+.game-card > p {
+	font-size: 0.92rem;
+}
+.game-head {
+	display: flex;
+	align-items: center;
+	gap: 0.8rem;
+}
+.game-head h3 {
+	font: 400 1.55rem/1.15 var(--font-display);
+}
+.game-size {
+	display: block;
+	margin-top: 0.25rem;
+	font-size: 0.75rem;
+	font-weight: 800;
+}
+.sigil {
+	display: flex;
+	flex: none;
+	align-items: center;
+	justify-content: center;
+	gap: 2px;
+	width: 3.7rem;
+	height: 3.7rem;
+	background: var(--panel);
+	border: 2px solid var(--ink);
+	border-radius: var(--radius-s);
+	overflow: hidden;
+}
+.sigil * {
+	animation: none;
+}
+.sigil > svg {
+	width: 2.3rem;
+	height: 2.3rem;
+}
+.sigil .orb {
+	width: 1rem;
+}
+.sigil .orb.is-big {
+	width: 1.7rem;
+	margin: 0 -0.25rem;
+}
+.sigil .card {
+	width: 2rem;
+	font-size: 1.3rem;
+	box-shadow: none;
+}
+.sigil .spark {
+	width: 2.5rem;
+	font-size: 1.3rem;
+	box-shadow: none;
+}
+.sigil .candle {
+	height: 3.2rem;
+}
+.grove-footer {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 0.7rem;
+	margin-top: 4rem;
+	padding-top: 1.5rem;
+	border-top: 1px solid rgb(from var(--paper) r g b / 0.22);
+	font-size: 0.8rem;
+	text-align: center;
+}
+
+/* How many seats to fill with bots. Native radios, drawn as a row of chips. */
+.seats-pick {
+	display: flex;
+	align-items: center;
+	gap: 0.25rem;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 0.85rem;
+	font-weight: 800;
+}
+.seats-pick legend {
+	float: left;
+	margin-right: 0.35rem;
+	padding: 0;
+}
+.seats-pick label {
+	display: grid;
+	place-items: center;
+	width: 2rem;
+	aspect-ratio: 1;
+	border: 3px solid var(--ink);
+	border-radius: var(--radius-s);
+	cursor: pointer;
+	transition:
+		background 0.2s,
+		transform 0.2s var(--spring);
+}
+.seats-pick label.is-on {
+	background: var(--gold);
+	transform: translateY(-2px);
+}
+.seats-pick label:has(:focus-visible) {
+	outline: 3px solid var(--ink);
+	outline-offset: 3px;
+}
+.seats-pick input {
+	position: absolute;
+	opacity: 0;
+}
+
+/* ---------- table ---------- */
+.table {
+	color: var(--ink);
+	background: var(--paper);
+	border: 3px solid var(--ink);
+	border-radius: var(--radius);
+	padding: 1.5rem;
+	margin-top: 1.5rem;
+	display: grid;
+	justify-items: center;
+	gap: 0.9rem;
+}
+.bar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.8rem;
+	width: 100%;
+}
+.bar h1 {
+	font: 400 clamp(1.6rem, 5.5vw, 2.8rem) / 1 var(--font-display);
+	text-align: center;
+	text-shadow: 0 4px 0 var(--halo);
+}
+.seats {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	justify-content: center;
+	gap: 0.4rem clamp(0.6rem, 4vw, 3rem);
+}
+.seat {
+	display: grid;
+	justify-items: center;
+	scale: 0.86;
+	transform-origin: 50% 100%;
+	transition: scale 0.45s var(--spring);
+}
+.seat.is-active {
+	scale: 1;
+}
+.seat.is-winner .poff {
+	animation: cheer 0.5s ease-in-out infinite alternate;
+}
+.seat-name {
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
+	margin-top: -0.3rem;
+	padding: 0.1rem 0.7rem;
+	font-weight: 800;
+	white-space: nowrap;
+	background: var(--paper);
+	border: 3px solid var(--ink);
+	border-radius: var(--radius-s);
+	transition: box-shadow 0.3s var(--ease);
+}
+.seat-name::before {
+	content: "";
+	width: 0.75rem;
+	aspect-ratio: 1;
+	border-radius: 50%;
+	background: var(--c);
+	border: 2px solid var(--ink);
+}
+.seat.is-active .seat-name {
+	box-shadow: 0 0 0 4px var(--gold);
+}
+.status {
+	min-height: 2.2rem;
+	font: 400 1.6rem/1.2 var(--font-display);
+	text-align: center;
+	animation: rise 0.45s var(--ease);
+}
+.status:empty {
+	display: none;
+}
+.notice {
+	min-height: 1.5em;
+	font-weight: 800;
+	color: var(--ember-deep);
+	text-align: center;
+}
+.result {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 0.7rem;
+	animation: pop 0.5s 0.5s var(--spring) backwards;
+}
+.rules {
+	width: min(100%, 32rem);
+	padding: 0.6rem 1rem;
+	background: var(--paper);
+	border: 3px solid var(--ink);
+	border-radius: var(--radius-s);
+}
+.rules summary {
+	font-weight: 800;
+	cursor: pointer;
+}
+.rules ul {
+	margin: 0.5rem 0 0.2rem;
+	padding-left: 1.2rem;
+	animation: rise 0.35s var(--ease);
+}
+
+.waiting {
+	color: var(--ink);
+	display: grid;
+	justify-items: center;
+	justify-content: center;
+	gap: 0.9rem;
+	max-width: 30rem;
+	margin: 3rem auto 0;
+	padding: 1.6rem 1.5rem 2rem;
+	text-align: center;
+	background: var(--paper);
+	border: var(--line) solid var(--ink);
+	border-radius: var(--radius);
+	box-shadow: var(--drop);
+}
+.waiting h1 {
+	font: 400 2.1rem/1 var(--font-display);
+}
+.roster {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 0.6rem 1rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.roster li {
+	display: grid;
+	justify-items: center;
+	min-width: 4.6rem;
+	font-weight: 800;
+	animation: arrive 0.55s var(--spring);
+}
+.roster small {
+	font-size: 0.7rem;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	opacity: 0.7;
+}
+.roster .is-empty {
+	opacity: 0.5;
+	animation: none;
+}
+.roster-gap {
+	width: 3.4rem;
+	height: 3.4rem;
+	margin: 0.9rem 0 0.3rem;
+	border: 3px dashed var(--ink);
+	border-radius: 50%;
+}
+.code {
+	padding-left: 0.25em;
+	/* Body font on purpose: display capitals are harder to tell apart and this gets read aloud. */
+	font: 900 3.4rem/1 var(--font-body);
+	letter-spacing: 0.25em;
+	color: var(--ember-deep);
+}
+
+/* ---------- rune drop ---------- */
+.rd {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+	width: var(--board);
+	padding: 8px;
+	background: var(--panel);
+	border: var(--line) solid var(--ink);
+	border-radius: var(--radius);
+	box-shadow: var(--drop);
+	/* Orbs fall in from above the slab; clip them so they do not cross the status line. */
+	overflow: hidden;
+}
+.rd-col {
+	display: grid;
+	gap: 6px;
+	padding: 4px 3px;
+	background: none;
+	border: 0;
+	border-radius: var(--radius-s);
+	cursor: pointer;
+	transition: background 0.2s;
+}
+.rd-col:disabled {
+	cursor: default;
+}
+.rd-col:hover:not(:disabled) {
+	background: rgb(from var(--c) r g b / 0.35);
+}
+.rd-hole {
+	position: relative;
+	aspect-ratio: 1;
+	border-radius: 50%;
+	background: var(--pit);
+	box-shadow: inset 0 0 0 3px var(--ink);
+}
+.rd-hole .orb {
+	position: absolute;
+	inset: 0;
+}
+.rd-fall {
+	animation: fall 0.65s cubic-bezier(0.45, 0, 0.75, 0.4);
+}
+.rd-fall.is-winning {
+	animation:
+		fall 0.65s cubic-bezier(0.45, 0, 0.75, 0.4),
+		throb 0.7s 0.65s ease-in-out infinite alternate;
+}
+
+/* ---------- turncoat ---------- */
+.tc {
+	display: grid;
+	gap: 0.6rem;
+}
+.tc-grid {
+	display: grid;
+	grid-template-columns: repeat(8, 1fr);
+	gap: 3px;
+	width: var(--board);
+	padding: 5px;
+	background: var(--ink);
+	border: var(--line) solid var(--ink);
+	border-radius: var(--radius);
+	box-shadow: var(--drop);
+	overflow: hidden;
+}
+.tc-cell {
+	display: grid;
+	place-items: center;
+	aspect-ratio: 1;
+	padding: 0;
+	background: var(--grass);
+	border: 0;
+	border-radius: 5px;
+	perspective: 200px;
+}
+.tc-cell.is-last {
+	box-shadow: inset 0 0 0 3px var(--gold);
+}
+.tc-cell:not(:disabled) {
+	cursor: pointer;
+}
+/* Each disc turns over a beat later the further it is from the move, so a capture ripples outward. */
+.tc-disc {
+	width: 80%;
+	animation: flip 0.5s var(--spring) backwards;
+	animation-delay: calc(var(--d) * 110ms);
+}
+.tc-hint {
+	width: 30%;
+	aspect-ratio: 1;
+	border-radius: 50%;
+	background: var(--c);
+	border: 2px solid var(--ink);
+	animation: pop 0.4s var(--spring) backwards;
+	animation-delay: 0.5s;
+	transition: scale 0.2s var(--spring);
+}
+.tc-cell:hover .tc-hint {
+	scale: 1.9;
+}
+
+/* ---------- last candle ---------- */
+.lc {
+	display: grid;
+	justify-items: center;
+	gap: 0.6rem;
+	padding: 1.2rem 1.4rem 1rem;
+	background: var(--panel);
+	border: var(--line) solid var(--ink);
+	border-radius: var(--radius);
+	box-shadow: var(--drop);
+}
+.lc-row {
+	display: flex;
+	padding-bottom: 4px;
+	border-bottom: var(--line) solid var(--ink);
+}
+.lc-candle {
+	width: clamp(1.9rem, 8.5vw, 3rem);
+	padding: 0;
+	background: none;
+	border: 0;
+	transition: translate 0.25s var(--spring);
+}
+.lc-candle:not(:disabled) {
+	cursor: pointer;
+}
+/* Going out: the candle shudders and the smoke curls up. */
+.lc-candle:not(.is-lit) .candle {
+	animation: shudder 0.45s var(--ease);
+}
+.candle {
+	display: block;
+}
+.candle-wax {
+	fill: var(--paper);
+	stroke: var(--ink);
+	stroke-width: 3;
+	stroke-linejoin: round;
+}
+.candle-drip {
+	fill: var(--paper-dim);
+	stroke: var(--ink);
+	stroke-width: 3;
+	stroke-linejoin: round;
+}
+.candle-wick,
+.candle-smoke {
+	fill: none;
+	stroke: var(--ink);
+	stroke-width: 3;
+	stroke-linecap: round;
+}
+.candle-smoke {
+	opacity: 0.35;
+	animation: puff 0.9s var(--ease);
+}
+.candle-flame {
+	fill: var(--gold);
+	stroke: var(--ink);
+	stroke-width: 3;
+	stroke-linejoin: round;
+	transform-box: fill-box;
+	transform-origin: 50% 100%;
+	animation: flicker 0.9s ease-in-out infinite alternate;
+	transition:
+		fill 0.2s,
+		scale 0.25s var(--spring);
+}
+/* Hovering a candle previews the move: it and every lit candle to its right will go out. */
+.lc-candle.is-lit:hover:not(:disabled),
+.lc-candle.is-lit:hover:not(:disabled) ~ .is-lit {
+	translate: 0 -6px;
+}
+.lc-candle.is-lit:hover:not(:disabled) .candle-flame,
+.lc-candle.is-lit:hover:not(:disabled) ~ .is-lit .candle-flame {
+	fill: var(--brook);
+	scale: 0.6;
+}
+
+/* ---------- mind auction ---------- */
+.ma {
+	display: grid;
+	gap: 0.9rem;
+	width: min(100%, 38rem);
+}
+.ma-rivals {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 0.7rem 1.4rem;
+}
+.ma-rival {
+	display: grid;
+	justify-items: center;
+	gap: 0.4rem;
+}
+.ma-score {
+	font-weight: 800;
+}
+.ma-score b,
+.ls-score {
+	display: inline-block;
+	font: 400 1.5rem/1 var(--font-display);
+	animation: bump 0.6s var(--spring);
+}
+.ma-hand {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 0.4rem;
+	min-height: 2.4rem;
+}
+.ma-hand button.card {
+	animation: deal 0.5s var(--spring) backwards;
+	animation-delay: calc(var(--i) * 55ms + 150ms);
+}
+.ma-hand.is-small {
+	gap: 0.2rem;
+}
+.ma-hand.is-small .card {
+	width: 1.5rem;
+	font-size: 0.9rem;
+	border-width: 2px;
+	border-radius: 6px;
+	box-shadow: 0 2px 0 var(--ink);
+}
+.ma-table {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	justify-content: center;
+	gap: 0.8rem clamp(0.6rem, 3vw, 1.4rem);
+	padding: 1.1rem 0.8rem 0.8rem;
+	background: var(--panel);
+	border: var(--line) solid var(--ink);
+	border-radius: var(--radius);
+	box-shadow: var(--drop);
+	perspective: 600px;
+}
+.ma-slot {
+	display: grid;
+	justify-items: center;
+	gap: 0.5rem;
+	min-width: 4.4rem;
+	text-align: center;
+}
+.ma-slot:first-child {
+	width: 6.5rem;
+}
+.ma-slot small {
+	max-width: 6.5rem;
+	font-size: 0.78rem;
+	font-weight: 800;
+	line-height: 1.2;
+	min-height: 2.4em;
+}
+.ma-last {
+	min-height: 1.5em;
+	font-weight: 800;
+	text-align: center;
+	animation: rise 0.45s var(--ease);
+}
+
+/* ---------- lone spark ---------- */
+.ls {
+	display: grid;
+	justify-items: center;
+	gap: 0.9rem;
+	width: min(100%, 34rem);
+}
+.ls-seats {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 0.8rem clamp(0.8rem, 4vw, 1.6rem);
+	width: 100%;
+	padding: 1.1rem 0.8rem 0.9rem;
+	background: var(--panel);
+	border: var(--line) solid var(--ink);
+	border-radius: var(--radius);
+	box-shadow: var(--drop);
+	perspective: 600px;
+}
+.ls-seat {
+	display: grid;
+	justify-items: center;
+	gap: 0.2rem;
+	min-width: 4.2rem;
+}
+.ls-name {
+	font-size: 0.82rem;
+	font-weight: 800;
+}
+.ls-picks {
+	display: flex;
+	gap: 0.5rem;
+}
+.spark.is-key {
+	--c: var(--gold);
+	cursor: pointer;
+	animation: deal 0.5s var(--spring) backwards;
+	transition: transform 0.25s var(--spring);
+}
+.spark.is-key:nth-child(2) {
+	animation-delay: 60ms;
+}
+.spark.is-key:nth-child(3) {
+	animation-delay: 120ms;
+}
+.spark.is-key:nth-child(4) {
+	animation-delay: 180ms;
+}
+.spark.is-key:nth-child(5) {
+	animation-delay: 240ms;
+}
+.spark.is-key:hover:not(:disabled) {
+	transform: translateY(-6px) rotate(-6deg);
+}
+.spark.is-key:disabled {
+	cursor: default;
+	opacity: 0.6;
+}
+.spark.is-key.is-chosen {
+	opacity: 1;
+	transform: translateY(-8px);
+	outline: 3px solid var(--ink);
+	outline-offset: 2px;
+}
+.ls-history {
+	display: flex;
+	gap: 0.3rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.ls-history li {
+	display: grid;
+	place-items: center;
+	width: 1.8rem;
+	aspect-ratio: 1;
+	font-weight: 800;
+	background: var(--c, var(--paper-dim));
+	border: 2px solid var(--ink);
+	border-radius: 50%;
+	animation: pop 0.4s var(--spring);
+}
+
+/* ---------- liar's bones ---------- */
+.lb {
+	display: grid;
+	justify-items: center;
+	gap: 0.9rem;
+	width: min(100%, 36rem);
+}
+.lb-seats {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 0.6rem;
+	width: 100%;
+}
+.lb-seat {
+	display: grid;
+	justify-items: center;
+	gap: 0.3rem;
+	min-width: 6.4rem;
+	padding: 0.4rem 0.6rem 0.6rem;
+	background: var(--panel);
+	border: 3px solid var(--ink);
+	border-radius: var(--radius-s);
+	transition:
+		translate 0.35s var(--spring),
+		box-shadow 0.3s var(--ease);
+}
+.lb-seat.is-up {
+	translate: 0 -5px;
+	box-shadow: 0 0 0 4px var(--gold);
+}
+.lb-seat.is-loser {
+	animation: shudder 0.5s 0.9s var(--ease) backwards;
+	box-shadow: 0 0 0 4px var(--ember);
+}
+.lb-name {
+	display: flex;
+	align-items: center;
+	gap: 0.35rem;
+	font-size: 0.85rem;
+	font-weight: 800;
+}
+.lb-name::before {
+	content: "";
+	width: 0.7rem;
+	aspect-ratio: 1;
+	border-radius: 50%;
+	background: var(--c);
+	border: 2px solid var(--ink);
+}
+.lb-bones {
+	display: flex;
+	align-items: center;
+	gap: 0.25rem;
+	min-height: 38px;
+}
+.lb-out {
+	font-weight: 800;
+	opacity: 0.6;
+}
+.lb-bid {
+	display: grid;
+	justify-items: center;
+	gap: 0.2rem;
+	width: 100%;
+	min-height: 5.4rem;
+	align-content: center;
+	padding: 0.7rem 1rem;
+	text-align: center;
+	background: var(--paper);
+	border: var(--line) solid var(--ink);
+	border-radius: var(--radius);
+	box-shadow: var(--drop);
+	animation: pop 0.45s var(--spring);
+}
+.lb-bid .die {
+	vertical-align: middle;
+	animation: none;
+}
+.lb-claim {
+	display: grid;
+	justify-items: center;
+}
+.lb-claim span {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font: 400 2.2rem/1.1 var(--font-display);
+}
+.lb-controls {
+	display: grid;
+	justify-items: center;
+	gap: 0.7rem;
+	animation: rise 0.4s var(--ease);
+}
+.lb-stepper {
+	display: flex;
+	align-items: center;
+	gap: 0.8rem;
+}
+.lb-count {
+	min-width: 2ch;
+	font: 400 2.2rem/1 var(--font-display);
+	text-align: center;
+}
+.lb-faces {
+	display: flex;
+	gap: 0.3rem;
+}
+.lb-face {
+	padding: 3px;
+	background: none;
+	border: 0;
+	border-radius: var(--radius-s);
+	cursor: pointer;
+	transition: transform 0.2s var(--spring);
+}
+.lb-face .die {
+	display: block;
+	animation: none;
+}
+.lb-face:hover {
+	transform: translateY(-3px);
+}
+.lb-face.is-chosen {
+	transform: translateY(-5px);
+	box-shadow: 0 0 0 3px var(--ink);
+}
+.lb-face.is-chosen .die-body {
+	fill: var(--gold);
+}
+.lb-hint {
+	min-height: 1.5em;
+	font-weight: 800;
+	opacity: 0.75;
+}
+
+/* ---------- knight's tour ---------- */
+.kt {
+	display: grid;
+	justify-items: center;
+	gap: 0.7rem;
+}
+.kt-grid {
+	display: grid;
+	grid-template-columns: repeat(6, 1fr);
+	width: min(100%, 27rem);
+	border: var(--line) solid var(--ink);
+	border-radius: var(--radius);
+	box-shadow: var(--drop);
+	overflow: hidden;
+}
+.kt-cell {
+	display: grid;
+	place-items: center;
+	aspect-ratio: 1;
+	padding: 0;
+	font: 400 1.25rem/1 var(--font-display);
+	background: var(--paper);
+	border: 0;
+	transition: background 0.5s var(--ease);
+}
+.kt-cell.is-dark {
+	background: var(--paper-dim);
+}
+.kt-cell.is-visited {
+	background: var(--panel-deep);
+}
+.kt-cell.is-visited.is-dark {
+	background: var(--pit);
+}
+.kt-cell:not(:disabled) {
+	cursor: pointer;
+}
+.kt-cell.is-target {
+	box-shadow: inset 0 0 0 5px var(--gold);
+	animation: beckon 0.9s ease-in-out infinite alternate;
+}
+.kt-knight {
+	display: grid;
+	place-items: center;
+	animation: hop 0.5s var(--ease);
+}
+.kt-knight .poff {
+	max-width: 88%;
+	height: auto;
+}
+.kt-step {
+	animation: pop 0.4s var(--spring);
+}
+.kt-foot {
+	display: flex;
+	align-items: center;
+	gap: 1.5rem;
+}
+.kt-hint {
+	min-height: 1.5em;
+	font-weight: 800;
+	white-space: pre;
+}
+
+/* ---------- rune cipher ---------- */
+.rc {
+	display: grid;
+	justify-items: center;
+	gap: 0.8rem;
+}
+.rc-seal,
+.rc-rows {
+	margin: 0;
+	background: var(--panel);
+	border: var(--line) solid var(--ink);
+	border-radius: var(--radius);
+	box-shadow: var(--drop);
+}
+.rc-seal {
+	padding: 0.6rem 1rem;
+}
+.rc-sealed {
+	font: 400 1.15rem/1 var(--font-display);
+}
+.rc-rows {
+	display: grid;
+	gap: 4px;
+	padding: 0.7rem;
+	list-style: none;
+}
+.rc-row {
+	display: flex;
+	align-items: center;
+	gap: 0.9rem;
+	padding: 3px 8px;
+	border-radius: var(--radius-s);
+	transition: background 0.3s;
+}
+.rc-row.is-current {
+	background: var(--paper);
+}
+.rc-slots {
+	display: flex;
+	gap: 5px;
+}
+.rc-slots .rune,
+.rc-blank {
+	width: 2.4rem;
+	height: 2.4rem;
+}
+.rc-slots .rune {
+	animation: pop 0.35s var(--spring);
+}
+.rc-blank {
+	border: 2px dashed rgb(from var(--ink) r g b / 0.3);
+	border-radius: var(--radius-s);
+}
+.rc-pips {
+	display: grid;
+	grid-template-columns: repeat(2, 0.8rem);
+	gap: 4px;
+}
+.rc-pips i {
+	aspect-ratio: 1;
+	border-radius: 50%;
+	background: var(--panel-deep);
+	border: 2px solid var(--ink);
+}
+/* The verdict arrives one pip at a time. */
+.rc-pips .is-exact,
+.rc-pips .is-near {
+	animation: pop 0.4s var(--spring) backwards;
+	animation-delay: calc(var(--i) * 160ms + 300ms);
+}
+.rc-pips .is-exact {
+	background: var(--gold);
+}
+.rc-pips .is-near {
+	background: var(--paper);
+}
+.rc-input {
+	display: grid;
+	justify-items: center;
+	gap: 0.7rem;
+}
+.rc-palette {
+	display: flex;
+	gap: 0.35rem;
+}
+.rc-key {
+	padding: 0;
+	background: none;
+	border: 0;
+	cursor: pointer;
+	transition: translate 0.2s var(--spring);
+}
+.rc-key:hover:not(:disabled) {
+	translate: 0 -5px;
+}
+.rc-key:active:not(:disabled) {
+	translate: 0 2px;
+}
+.rc-key:disabled {
+	opacity: 0.45;
+	cursor: not-allowed;
+}
+.rc-actions {
+	display: flex;
+	gap: 0.6rem;
+}
+
+/* ---------- arcana trials ---------- */
+.arcana-board {
+	width: min(100%, 32rem);
+	display: grid;
+	justify-items: center;
+	gap: 1.1rem;
+}
+.arcana-summary {
+	text-align: center;
+}
+.arcana-summary strong {
+	font-family: var(--font-display);
+	font-size: 1.3rem;
+	font-weight: 400;
+}
+.arcana-summary p {
+	font-size: 0.85rem;
+	margin-top: 0.3rem;
+}
+.hexagon-grid {
+	width: 100%;
+	padding: 0.7rem 0;
+}
+.hexagon-row {
+	display: flex;
+	justify-content: center;
+	gap: 4px;
+	margin-top: -6px;
+}
+.hexagon-cell {
+	display: grid;
+	place-content: center;
+	width: 17%;
+	aspect-ratio: 0.88;
+	border: 0;
+	background: var(--panel-deep);
+	color: var(--ink);
+	clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+	cursor: pointer;
+	padding: 0.5rem;
+	font: 400 1.7rem/1 var(--font-display);
+}
+.hexagon-cell small {
+	font: 800 0.65rem/1 var(--font-body);
+	margin-top: 0.25rem;
+}
+.hexagon-cell:disabled {
+	cursor: default;
+	opacity: 1;
+}
+.hexagon-cell.is-selected {
+	background: var(--gold);
+}
+.hexagon-cell:hover:not(:disabled),
+.hexagon-cell:focus-visible {
+	background: var(--ember);
+	outline: 0;
+}
+.hexagon-controls {
+	display: grid;
+	justify-items: center;
+	gap: 0.7rem;
+	text-align: center;
+}
+.hexagon-history {
+	width: 100%;
+	text-align: center;
+}
+.hexagon-history ol {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 0.5rem;
+	list-style: none;
+	padding: 0;
+}
+.hexagon-history li {
+	border: 1px solid var(--ink);
+	border-radius: var(--radius-s);
+	padding: 0.3rem 0.6rem;
+	font-size: 0.8rem;
+}
+.morris {
+	display: grid;
+	justify-items: center;
+	gap: 0.8rem;
+	width: 100%;
+}
+.morris-phase {
+	font-family: var(--font-display);
+	font-size: 1.25rem;
+	text-align: center;
+}
+.morris-reserves {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 0.7rem 1.2rem;
+	font-size: 0.85rem;
+}
+.morris-reserves > span {
+	display: flex;
+	gap: 0.35rem;
+	align-items: center;
+}
+.morris-reserves .orb {
+	display: inline-block;
+	width: 1rem;
+	height: 1rem;
+}
+.morris-board {
+	position: relative;
+	width: min(100%, 30rem);
+	aspect-ratio: 1;
+	background: var(--panel);
+	border: 3px solid var(--ink);
+	border-radius: var(--radius);
+}
+.morris-lines {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	fill: none;
+	stroke: var(--ink);
+	stroke-width: 0.045;
+}
+.morris-point {
+	position: absolute;
+	transform: translate(-50%, -50%);
+	width: 8%;
+	height: 8%;
+	padding: 0;
+	border: 2px solid var(--ink);
+	border-radius: 50%;
+	background: var(--paper-dim);
+	color: var(--ink);
+	cursor: pointer;
+	font-size: 0.75rem;
+}
+.morris-point .orb {
+	width: 100%;
+	height: 100%;
+	border-width: 1px;
+}
+.morris-point.is-legal {
+	background: var(--gold);
+	box-shadow: 0 0 0 3px var(--paper);
+}
+.morris-point.is-selected {
+	outline: 4px solid var(--ember-deep);
+	outline-offset: 3px;
+}
+.morris-point:disabled {
+	cursor: default;
+}
+.morris-hint {
+	font-size: 0.85rem;
+	text-align: center;
+}
+.eq {
+	width: min(100%, 38rem);
+	display: grid;
+	gap: 1rem;
+}
+.eq-heading,
+.eq-scores,
+.eq-cards,
+.eq-lanes,
+.eq-actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.6rem;
+}
+.eq-heading {
+	justify-content: space-between;
+}
+.eq-score {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.3rem 0.7rem;
+	border-bottom: 3px solid var(--c);
+	font-size: 0.85rem;
+}
+.eq-draft {
+	display: grid;
+	gap: 1rem;
+}
+.eq-preview {
+	padding: 1rem;
+	background: var(--panel);
+	border: 2px solid var(--ink);
+	border-radius: var(--radius);
+}
+.eq-expression,
+.eq-term {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.3rem;
+}
+.eq-expression {
+	flex-wrap: wrap;
+	font: 400 1.6rem/1.5 var(--font-display);
+}
+.eq-number {
+	min-width: 1.6rem;
+	text-align: center;
+}
+.eq-operator {
+	padding: 0 0.2rem;
+}
+.eq-hint {
+	font-size: 0.85rem;
+	margin-top: 0.4rem;
+}
+.eq-picker {
+	border: 0;
+	padding: 0;
+	margin: 0;
+}
+.eq-picker legend {
+	padding: 0;
+	margin-bottom: 0.5rem;
+	font-weight: 800;
+	font-size: 0.85rem;
+}
+.eq-lanes .is-chosen {
+	background: var(--gold);
+	color: var(--ink);
+}
+.eq-reveal {
+	padding: 1rem;
+	background: var(--paper-dim);
+	border: 2px solid var(--ink);
+	border-radius: var(--radius);
+}
+.eq-reveal h3 {
+	font: 400 1.2rem/1.3 var(--font-display);
+	margin-bottom: 0.6rem;
+}
+.eq-result {
+	margin-top: 0.5rem;
+	font-size: 0.85rem;
+}
+
+/* ---------- motion ---------- */
+/* Ambient: keeps the cast and the scenery alive. */
+@keyframes breathe {
+	50% {
+		transform: scale(1.025, 0.972);
+	}
+}
+@keyframes blink {
+	0%,
+	93%,
+	100% {
+		transform: scaleY(1);
+	}
+	96% {
+		transform: scaleY(0.08);
+	}
+}
+@keyframes ponder {
+	to {
+		transform: rotate(-1deg);
+	}
+}
+@keyframes cheer {
+	to {
+		translate: 0 -14px;
+	}
+}
+@keyframes flicker {
+	from {
+		transform: scale(1, 1) rotate(-3deg);
+	}
+	to {
+		transform: scale(0.9, 1.08) rotate(3deg);
+	}
+}
+@keyframes drift {
+	to {
+		transform: translateX(4%);
+	}
+}
+@keyframes glow {
+	to {
+		scale: 1.04;
+	}
+}
+@keyframes beckon {
+	to {
+		box-shadow: inset 0 0 0 9px var(--gold);
+	}
+}
+@keyframes throb {
+	to {
+		scale: 1.14;
+		box-shadow: 0 0 0 4px var(--gold);
+	}
+}
+
+/* Arrivals: a screen, a line of text, a mage, a thing put on the table. */
+@keyframes enter {
+	from {
+		opacity: 0;
+		transform: translateY(16px);
+	}
+}
+@keyframes rise {
+	from {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+}
+@keyframes arrive {
+	from {
+		opacity: 0;
+		transform: translateY(30px) scale(0.7);
+	}
+}
+@keyframes pop {
+	from {
+		opacity: 0;
+		transform: scale(0.3);
+	}
+}
+@keyframes bump {
+	40% {
+		transform: scale(1.5);
+		color: var(--ember-deep);
+	}
+}
+@keyframes deal {
+	from {
+		opacity: 0;
+		transform: translateY(26px) rotate(8deg);
+	}
+}
+@keyframes place {
+	from {
+		opacity: 0;
+		transform: translateY(-22px) rotate(-8deg);
+	}
+}
+
+/* Moves: each game piece has one way of moving. */
+@keyframes flip {
+	from {
+		transform: rotateY(90deg) scale(0.8);
+	}
+}
+@keyframes tumble {
+	from {
+		opacity: 0;
+		transform: translateY(-16px) rotate(-200deg) scale(0.5);
+	}
+}
+@keyframes fall {
+	0% {
+		transform: translateY(calc((var(--row) + 1.2) * -108%));
+	}
+	70% {
+		transform: translateY(0);
+		animation-timing-function: ease-out;
+	}
+	84% {
+		transform: translateY(-14%);
+		animation-timing-function: ease-in;
+	}
+}
+@keyframes hop {
+	0% {
+		transform: translateY(-60%) scale(0.9, 1.12);
+	}
+	60% {
+		transform: translateY(0) scale(1.14, 0.84);
+	}
+}
+@keyframes shudder {
+	25% {
+		transform: translateX(-3px) rotate(-3deg);
+	}
+	50% {
+		transform: translateX(3px) rotate(3deg);
+	}
+	75% {
+		transform: translateX(-2px);
+	}
+}
+@keyframes puff {
+	from {
+		opacity: 0.8;
+		transform: translateY(6px);
+	}
+}
+
+@media (max-width: 900px) {
+	.ticket-intro {
+		width: 100%;
+	}
+}
+@media (max-width: 720px) {
+	.app {
+		padding-inline: 1rem;
+	}
+	.masthead {
+		min-height: 66px;
+	}
+	.masthead > div {
+		gap: 0.8rem;
+		font-size: 0.72rem;
+	}
+	.masthead .wordmark {
+		font-size: 0.9rem;
+	}
+	.hero {
+		grid-template-columns: 1fr 1fr;
+		gap: 0;
+		padding-top: 1.6rem;
+	}
+	.hero-kicker {
+		font-size: 0.6rem;
+		max-width: 24ch;
+	}
+	.title {
+		font-size: clamp(2.8rem, 8vw, 4rem);
+	}
+	.tagline {
+		grid-column: 1/-1;
+		font-size: 0.9rem;
+	}
+	.hero-cast {
+		margin-left: -1.2rem;
+	}
+	.ticket {
+		gap: 1rem;
+		padding: 1rem;
+	}
+	.table {
+		padding: 1rem 0.5rem;
+	}
+	.bar {
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+	.bar h1 {
+		flex-basis: 100%;
+		order: -1;
+	}
+	.bar .btn {
+		padding-inline: 0.6rem;
+	}
+}
+@media (max-width: 420px) {
+	.masthead > div a:first-child {
+		display: none;
+	}
+	.hero {
+		grid-template-columns: 1fr;
+	}
+	.hero > div:first-child {
+		position: relative;
+		z-index: 1;
+	}
+	.hero-cast {
+		order: -1;
+		width: 80%;
+		margin: 0 auto 0.7rem;
+	}
+	.title {
+		max-width: none;
+		font-size: 3.4rem;
+	}
+	.hero-kicker {
+		max-width: none;
+		font-size: 0.58rem;
+	}
+	.tagline {
+		max-width: 33ch;
+		margin-top: 1.2rem;
+	}
+	.ticket {
+		align-items: start;
+	}
+	.ticket .field input {
+		width: 100%;
+	}
+	.ticket > .field {
+		width: 100%;
+	}
+	.ticket .code-input {
+		width: 6.2rem;
+	}
+	.join {
+		width: 100%;
+		justify-content: space-between;
+	}
+	.collection-heading {
+		align-items: start;
+	}
+	.collection-heading > svg {
+		width: 24px;
+	}
+	.game-card {
+		padding: 1.1rem;
+	}
+	.hexagon-cell {
+		font-size: 1.3rem;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation: none !important;
+		transition: none !important;
+	}
+}
+
+/* The full collection shares the grove palette and compact table controls. */
+.catalog-controls {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: end;
+	justify-content: space-between;
+	gap: 1rem;
+	margin-bottom: 1rem;
+}
+.season-tabs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+}
+.season-tabs span {
+	font-size: 0.7rem;
+	opacity: 0.8;
+}
+.catalog-search {
+	display: grid;
+	gap: 0.25rem;
+	font-size: 0.8rem;
+}
+.catalog-search input {
+	width: min(100%, 18rem);
+	padding: 0.65rem 0.8rem;
+	background: var(--paper);
+	color: var(--ink);
+	border: 2px solid var(--ink);
+	border-radius: var(--radius-s);
+	font: inherit;
+}
+.catalog-count {
+	font-size: 0.8rem;
+	margin-bottom: 1rem;
+}
+.catalog-games .game-card {
+	animation-delay: 0ms;
+}
+.edition-notes {
+	font-size: 0.78rem;
+	padding-block: 0.35rem;
+	border-block: 1px solid var(--panel-deep);
+}
+.edition-notes summary {
+	cursor: pointer;
+	font-weight: 800;
+}
+.edition-notes p {
+	margin: 0.5rem 0;
+}
+.edition-notes a {
+	color: var(--ember-deep);
+}
+.catalog-empty {
+	padding: 2rem;
+	border: 1px dashed var(--paper);
+	border-radius: var(--radius);
+	display: grid;
+	justify-items: start;
+	gap: 1rem;
+}
+.trial {
+	width: min(100%, 42rem);
+	display: grid;
+	gap: 1rem;
+}
+.trial-heading {
+	text-align: center;
+}
+.trial-heading h2 {
+	font: 400 1.5rem/1.2 var(--font-display);
+	margin-bottom: 0.5rem;
+}
+.trial-heading p {
+	max-width: 60ch;
+	margin-inline: auto;
+}
+.trial-scores {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 0.5rem;
+}
+.trial-scores > span {
+	display: flex;
+	gap: 0.7rem;
+	align-items: center;
+	padding: 0.3rem 0.6rem;
+	border-bottom: 3px solid var(--c);
+}
+.trial-facts {
+	margin: 0;
+	padding: 1rem 1rem 1rem 2rem;
+	background: var(--panel);
+	border-radius: var(--radius-s);
+	font-size: 0.9rem;
+}
+.trial-grid {
+	display: grid;
+	grid-template-columns: repeat(var(--columns), minmax(0, 1fr));
+	gap: 3px;
+	width: 100%;
+	background: var(--ink);
+	border: 3px solid var(--ink);
+	border-radius: var(--radius-s);
+	overflow: hidden;
+}
+.trial-cell {
+	display: grid;
+	place-items: center;
+	min-width: 0;
+	min-height: 2.7rem;
+	aspect-ratio: 1;
+	padding: 0.15rem;
+	border: 0;
+	background: var(--c, var(--panel));
+	color: var(--ink);
+	font: 800 clamp(0.6rem, 2.5vw, 1rem)/1.1 var(--font-body);
+	overflow-wrap: anywhere;
+	cursor: pointer;
+}
+.trial-cell:not(.is-static):hover:not(:disabled),
+.trial-cell:focus-visible {
+	background: var(--gold);
+	outline: 3px solid var(--ember-deep);
+	outline-offset: -3px;
+}
+.trial-cell:active:not(:disabled) {
+	transform: scale(0.95);
+}
+.trial-cell.is-static,
+.trial-cell:disabled {
+	cursor: default;
+}
+.trial-selection {
+	border: 2px solid var(--ink);
+	border-radius: var(--radius-s);
+	padding: 1rem;
+	min-width: 0;
+}
+.trial-selection legend {
+	font-weight: 800;
+	padding-inline: 0.3rem;
+}
+.trial-selection p {
+	margin-bottom: 0.7rem;
+	font-size: 0.8rem;
+}
+.trial-options,
+.trial-actions {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 0.6rem;
+}
+.trial-options {
+	margin-bottom: 1rem;
+}
+.trial-actions .btn,
+.trial-options .btn {
+	white-space: normal;
+	text-align: center;
+}
+.trial-actions {
+	max-height: 20rem;
+	overflow: auto;
+	padding: 0.3rem 0.3rem 0.7rem;
+}
+.trial-input {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: end;
+	gap: 0.7rem;
+}
+.trial-input label {
+	display: grid;
+	gap: 0.4rem;
+	flex: 1;
+	min-width: 12rem;
+	font-weight: 800;
+}
+.trial-input input {
+	padding: 0.6rem;
+	border: 2px solid var(--ink);
+	border-radius: var(--radius-s);
+	background: var(--glint);
+	min-width: 0;
+	width: 100%;
+}
+.trial-log {
+	padding: 1rem;
+	border: 2px solid var(--ink);
+	border-radius: var(--radius-s);
+	background: var(--paper-dim);
+}
+.trial-log h3 {
+	font: 400 1.15rem/1.3 var(--font-display);
+}
+.trial-log ol {
+	margin: 0.7rem 0 0;
+	padding-left: 1.2rem;
+	font-size: 0.85rem;
+}
+.trial-log li + li {
+	margin-top: 0.3rem;
+}
+@media (max-width: 420px) {
+	.trial-cell {
+		min-height: 1.8rem;
+	}
+	.catalog-search {
+		width: 100%;
+	}
+	.catalog-search input {
+		width: 100%;
+	}
+}
+.table-chat {
+	width: min(100%, 42rem);
+	border: 2px solid var(--ink);
+	border-radius: var(--radius-s);
+	padding: 1rem;
+	background: var(--panel);
+}
+.table-chat summary {
+	font-weight: 800;
+	cursor: pointer;
+}
+.table-chat > p {
+	font-size: 0.8rem;
+	margin-top: 0.5rem;
+}
+.table-chat ol {
+	padding-left: 1.3rem;
+	max-height: 12rem;
+	overflow: auto;
+	overflow-wrap: anywhere;
+	font-size: 0.85rem;
+}
+.table-chat form {
+	display: flex;
+	gap: 0.7rem;
+	align-items: end;
+	flex-wrap: wrap;
+}
+.table-chat label {
+	display: grid;
+	gap: 0.3rem;
+	flex: 1;
+	min-width: 12rem;
+	font-size: 0.8rem;
+}
+.table-chat input {
+	padding: 0.5rem;
+	width: 100%;
+	min-width: 0;
+	border: 2px solid var(--ink);
+	border-radius: var(--radius-s);
+	background: var(--paper);
+}
+.trial-cell.wall-n {
+	border-top: 5px solid var(--ember-deep);
+}
+.trial-cell.wall-e {
+	border-right: 5px solid var(--ember-deep);
+}
+.trial-cell.wall-s {
+	border-bottom: 5px solid var(--ember-deep);
+}
+.trial-cell.wall-w {
+	border-left: 5px solid var(--ember-deep);
+}
+
+/* ---------- home: one door per shelf ---------- */
+.doors {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+	gap: 1.25rem;
+	margin-top: 2.5rem;
+	scroll-margin-top: 1.5rem;
+}
+.door {
+	display: grid;
+	gap: 0.45rem;
+	align-content: start;
+	justify-items: start;
+	padding: 0 0 1.2rem;
+	font: inherit;
+	text-align: left;
+	color: var(--ink);
+	background: var(--paper);
+	border: 3px solid var(--ink);
+	border-radius: var(--radius);
+	box-shadow: var(--drop);
+	overflow: hidden;
+	cursor: pointer;
+	animation: enter 0.45s var(--ease) backwards;
+	animation-delay: calc(var(--i) * 70ms);
+	transition:
+		transform 0.2s var(--spring),
+		box-shadow 0.2s var(--ease);
+}
+.door:hover {
+	transform: translateY(-5px) rotate(-0.6deg);
+	box-shadow: 0 11px 0 var(--ink);
+}
+.door:active {
+	transform: translateY(4px);
+	box-shadow: 0 2px 0 var(--ink);
+}
+.door > :not(.door-art) {
+	margin-inline: 1.2rem;
+}
+.door-art {
+	display: flex;
+	align-items: flex-end;
+	justify-content: center;
+	gap: 0.5rem;
+	width: 100%;
+	height: 9.5rem;
+	padding-bottom: 0.9rem;
+	margin-bottom: 0.5rem;
+	background: rgb(from var(--c) r g b / 0.45);
+	border-bottom: 3px solid var(--ink);
+}
+.door-art .orb {
+	width: 2rem;
+	margin-bottom: 0.4rem;
+}
+.door-art .card,
+.door-art .die,
+.door-art .rune {
+	margin-bottom: 0.4rem;
+}
+.door-art .rune {
+	width: 2.6rem;
+	height: 2.6rem;
+}
+.door-art > svg:only-child {
+	align-self: center;
+}
+.door:hover .door-art .poff {
+	animation: hop 0.5s var(--spring);
+}
+.door-title {
+	font: 400 1.6rem/1.15 var(--font-display);
+}
+.door-note {
+	font-size: 0.9rem;
+}
+.door-count {
+	margin-top: 0.3rem;
+	padding: 0.15rem 0.6rem;
+	font-size: 0.75rem;
+	font-weight: 800;
+	background: var(--gold);
+	border: 2px solid var(--ink);
+	border-radius: 999px;
+}
+.shelf.is-open {
+	margin-top: 1.5rem;
+}
+.shelf.is-open h2 {
+	margin-top: 1.4rem;
+}
+
+/* ---------- lift, then confirm ---------- */
+/* A card or spark the player has lifted but not yet sent. */
+.card.is-ghost,
+.spark.is-ghost {
+	opacity: 0.55;
+	border-style: dashed;
+	box-shadow: none;
+}
+.lb-step,
+.lc-hint {
+	font-size: 0.8rem;
+	font-weight: 800;
+	opacity: 0.75;
+}
+.lc-hint {
+	text-align: center;
+}
+.lb-claim span {
+	flex-wrap: wrap;
+	justify-content: center;
+}
+/* Where the orb will come to rest in the column under the pointer. */
+.rd-col:is(:hover, :focus-visible):not(:disabled) .rd-hole.is-landing {
+	background: rgb(from var(--c) r g b / 0.75);
+	animation: throb 0.7s ease-in-out infinite alternate;
+}
+/* Empty points are small pegs; only the ones you can use grow into targets. */
+.morris-point.is-empty {
+	width: 3.2%;
+	height: 3.2%;
+	background: var(--ink);
+	transition:
+		width 0.2s var(--spring),
+		height 0.2s var(--spring);
+}
+.morris-point.is-empty.is-legal {
+	width: 6.5%;
+	height: 6.5%;
+	background: var(--gold);
+}
+.morris-point.is-empty.is-legal:hover {
+	width: 8%;
+	height: 8%;
+}
+.morris-reserves > span {
+	font-weight: 800;
+}
+.morris-pile {
+	display: flex;
+	align-items: center;
+	min-height: 1.1rem;
+	padding-left: 0.4rem;
+}
+.morris-pile .orb {
+	margin-left: -0.35rem;
+	animation: pop 0.3s var(--spring);
+}
+.morris-pile small {
+	font-weight: 600;
+	opacity: 0.7;
+}
+.door-art > svg:not(.poff, .imp, .die, .rune) {
+	margin-bottom: 2.2rem;
+	color: var(--gold);
+}
+.door:hover .imp {
+	animation: hop 0.5s var(--spring);
+}
+
+/* ---------- language switch ---------- */
+/* Caprasimo has no Hangul. These local heavy faces keep Korean headings as dark as the Latin ones. */
+@font-face {
+	font-family: "Display KO";
+	src:
+		local("Apple SD Gothic Neo Heavy"), local("AppleSDGothicNeo-Heavy"), local("Noto Sans CJK KR Black"),
+		local("NotoSansKR-Black"), local("Malgun Gothic Bold");
+	unicode-range: U+1100-11FF, U+3130-318F, U+AC00-D7A3;
+}
+:root {
+	--font-display: "Caprasimo", "Display KO", Georgia, serif;
+}
+.lang-switch {
+	position: absolute;
+	top: 16px;
+	right: 1.5rem;
+	z-index: 20;
+	font-family: var(--font-body);
+}
+.lang-button {
+	display: grid;
+	place-items: center;
+	width: 44px;
+	height: 44px;
+	color: var(--ink);
+	background: var(--paper);
+	border: 3px solid var(--ink);
+	border-radius: 50%;
+	box-shadow: 0 3px 0 var(--ink);
+	cursor: pointer;
+	transition: translate 0.15s var(--ease);
+}
+.lang-button svg {
+	width: 24px;
+	height: 24px;
+}
+.lang-button:hover,
+.lang-button[aria-expanded="true"] {
+	background: var(--gold);
+}
+.lang-button:active {
+	translate: 0 2px;
+	box-shadow: 0 1px 0 var(--ink);
+}
+.lang-menu {
+	position: absolute;
+	top: calc(100% + 10px);
+	right: 0;
+	display: grid;
+	gap: 2px;
+	min-width: 11rem;
+	padding: 6px;
+	background: var(--paper);
+	border: 3px solid var(--ink);
+	border-radius: var(--radius-s);
+	box-shadow: var(--drop);
+	animation: rise 0.25s var(--ease);
+}
+.lang-menu button {
+	display: flex;
+	align-items: center;
+	gap: 0.7rem;
+	min-height: 44px;
+	padding: 6px 10px;
+	color: var(--ink);
+	font-weight: 800;
+	text-align: left;
+	background: transparent;
+	border: 0;
+	border-radius: 10px;
+	cursor: pointer;
+}
+.lang-menu button:hover {
+	background: var(--panel);
+}
+.lang-menu button[aria-checked="true"] {
+	background: var(--panel-deep);
+}
+.flag {
+	flex: none;
+	width: 28px;
+	height: 28px;
+}
+.flag-rim {
+	fill: none;
+	stroke: var(--ink);
+	stroke-width: 1.5;
+}
+/* The globe sits in the corner above these panels; on the home screen the masthead already leaves room. */
+.table,
+.kit {
+	margin-top: 4.6rem;
+}
+@media (max-width: 720px) {
+	.lang-switch {
+		right: 1rem;
+	}
+}

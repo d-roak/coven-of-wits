@@ -1,0 +1,450 @@
+import type { Dictionary } from "../engineText"
+
+export const seasonThree: Dictionary = {
+	// Round labels and phases several of these games share. The seasonTwoCommon refusals live in chrome.ts.
+	Round: "라운드",
+	Trial: "시험",
+	Draft: "드래프트",
+	Roll: "굴림",
+	Board: "보드",
+	Initial: "첫 글자",
+	"Game complete": "게임 종료",
+
+	// Unknown: cube race on a 5×5 grove with hidden colour rules.
+	"A compact 5×5 adaptation of the cube race. Roll one orthogonal square toward the centre gate; the cube’s top colour changes with the roll.":
+		"큐브 경주를 5×5로 줄인 각색판이에요. 가운데 관문을 향해 상하좌우로 한 칸씩 굴리면 큐브 윗면 색이 바뀌어요.",
+	"The grove applies hidden colour rules. Observe exile, recolouring and extra turns; rules are revealed after each full table cycle.":
+		"숲에는 숨겨진 색 규칙이 있어요. 추방, 색 변화, 추가 턴을 지켜보세요. 모두가 한 번씩 턴을 마칠 때마다 규칙이 하나씩 공개돼요.",
+	"Pushing rolls the other cube one square; you cannot push a chain or off the board. An ivory top or tile exiles a cube to its home corner.":
+		"다른 큐브를 밀면 그 큐브도 한 칸 굴러요. 큐브 여러 개를 한꺼번에 밀거나 판 밖으로 밀 수는 없어요. 윗면이나 타일이 상아색이면 큐브는 출발 모서리로 추방돼요.",
+	"This edition uses a new board, automatic recolouring and no remote-control rule. Exile sends a cube to the nearest free home square. Extra turns are capped at 2 in a row.":
+		"이 에디션은 새 보드와 자동 색 변화를 쓰고 리모컨 규칙은 없어요. 추방된 큐브는 가장 가까운 빈 출발 칸으로 가요. 추가 턴은 연속 2번까지예요.",
+	"Reach the gate to win before colour effects apply. A completely blocked cube passes. After 60 turns, closest to the gate wins, with fewer exiles breaking ties.":
+		"관문에 닿으면 색 효과보다 먼저 승리해요. 완전히 막힌 큐브는 패스해요. 60턴이 지나면 관문에 가장 가까운 마법사가 이기고, 동률이면 추방이 적은 쪽이 이겨요.",
+	"New 5×5 cube board, automatic recolouring, capped extra turns and 60-turn finish; no remote-control rule.":
+		"새 5×5 큐브 보드, 자동 색 변화, 추가 턴 제한, 60턴 종료. 리모컨 규칙 없음.",
+	"Roll one neighbouring square.": "바로 옆 칸으로만 굴릴 수 있어요.",
+	"Discover the rules": "규칙 찾아내기",
+	"Reach square 13.": "13번 칸에 도착하세요.",
+	"Roll to {#n} ({hue})": "{n}번 칸으로 굴리기 ({hue})",
+	gate: "관문",
+	"Pass blocked cube": "막힌 큐브 패스",
+	"Mage {#n} passed a blocked cube.": "마법사 {n}: 큐브가 막혀 패스.",
+	"Mage {#n} rolled from {#a} to {#b}.": "마법사 {n}: {a}번 칸에서 {b}번 칸으로 굴림.",
+	"Mage {#n} was exiled after showing ivory.": "마법사 {n}: 상아색이 나와 추방.",
+	"Mage {#n} changed top colour to {hue}.": "마법사 {n}: 윗면 색 변경 → {hue}.",
+	"Mage {#n} received another roll.": "마법사 {n}: 한 번 더 굴림.",
+	"Your top: {hue}": "내 윗면: {hue}",
+	"Your cube: top {top}, north {north}, east {east}": "내 큐브: 윗면 {top}, 북쪽 {north}, 동쪽 {east}",
+	"Ivory top or tile sends a cube home.": "윗면이나 타일이 상아색이면 큐브는 출발 칸으로 돌아가요.",
+	"If its top colour is missing from surrounding tiles, the cube changes colour.":
+		"윗면 색이 주변 타일에 없으면 큐브 색이 바뀌어요.",
+	"A straight line of 3 matching tiles grants another roll.": "같은 색 타일 3개가 한 줄이면 한 번 더 굴려요.",
+	"Your cube orientation": "내 큐브 방향",
+	Top: "윗면",
+	North: "북쪽",
+	East: "동쪽",
+	"Exile penalty": "추방 벌점",
+	"Roll cube": "큐브 굴리기",
+	"{#n} Gate": "{n} 관문",
+	"{#n} Gate M{#m}": "{n} 관문 M{m}",
+	"{#n} ember": "{n} 불씨",
+	"{#n} gold": "{n} 금",
+	"{#n} brook": "{n} 시내",
+	"{#n} moss": "{n} 이끼",
+	"{#n} violet": "{n} 보라",
+	"{#n} ivory": "{n} 상아",
+	"{#n} {hue} M{#m}": "{n} {hue} M{m}",
+
+	// Equation Pyramid: three tiles in order make the target.
+	"A five-board, turn-based adaptation of the timed duel. Select 3 distinct tiles in order to form the target number.":
+		"시간제 결투를 보드 5개짜리 턴제로 각색했어요. 서로 다른 타일 3개를 순서대로 골라 목표 숫자를 만드세요.",
+	"Ignore the first tile’s operator; use the operators on the second and third tiles. Multiplication and division happen first.":
+		"첫 타일의 연산 기호는 무시하고 둘째, 셋째 타일의 기호를 써요. 곱셈과 나눗셈을 먼저 계산해요.",
+	"A new correct ordered equation scores +1. Wrong or repeated answers score −1. Each board ends after 6 answers or after every solution is found.":
+		"새로운 정답 수식은 +1점, 틀리거나 이미 나온 답은 −1점이에요. 보드는 답이 6번 나오거나 모든 해답이 나오면 끝나요.",
+	"Most points after 5 boards wins. Solo play is solved with a positive score. This edition replaces buzzers and clocks with alternating turns.":
+		"보드 5개를 마친 뒤 점수가 가장 높으면 이겨요. 혼자 할 때는 점수가 0보다 크면 성공이에요. 이 에디션은 버저와 시계 대신 번갈아 턴을 진행해요.",
+	"Five tile boards with alternating turns and six claims per board; replaces the show’s buzzers and timers.":
+		"타일 보드 5개, 번갈아 진행하는 턴, 보드당 답 6번. 방송의 버저와 타이머를 대신해요.",
+	"Select three tiles to form an equation.": "타일 세 개를 골라 수식을 만드세요.",
+	"Arrange three tiles": "타일 세 개 배열",
+	"Target: {value}": "목표: {value}",
+	"Used: {claims}": "사용한 조합: {claims}",
+	"Used: ": "사용한 조합: ",
+	"Choose three tiles in order. Ignore the first tile’s operator; multiplication and division go first.":
+		"타일 세 개를 순서대로 고르세요. 첫 타일의 연산 기호는 무시하고, 곱셈과 나눗셈을 먼저 계산해요.",
+	"Choose 3 tiles in equation order": "수식 순서대로 타일 3개를 고르세요",
+	"Offer equation": "수식 제출",
+	Target: "목표",
+	"Make {value}": "{value} 만들기",
+	"Accepted equations on this board": "이 보드에서 인정된 수식",
+	"Mage {#n}: tiles {tiles} = {value}; {delta}.": "마법사 {n}: 타일 {tiles} = {value}, {delta}.",
+
+	// Find the Key: the picture names and the phrase FIND THE KEY stay English (see keep.ts).
+	"A text-and-symbol adaptation of the prison well challenge, without water or an enforced deadline. You have 3 mistakes across the whole puzzle.":
+		"감옥 우물 도전을 글과 기호로 각색했어요. 물도 제한 시간도 없어요. 퍼즐 전체에서 3번까지 틀릴 수 있어요.",
+	"Solve the entrance riddle. Then choose pictures whose initials spell FIND THE KEY, in order; a picture may be used more than once.":
+		"입구의 수수께끼를 푸세요(답은 영어로 입력). 그다음 영어 이름의 첫 글자로 FIND THE KEY가 되도록 그림을 순서대로 고르세요. 같은 그림을 여러 번 써도 돼요.",
+	"Each picture has a rune number. Read the chosen rune numbers in sequence and enter that sequence to open the safe.":
+		"그림마다 룬 번호가 있어요. 고른 그림의 룬 번호를 순서대로 읽어 입력하면 금고가 열려요.",
+	"This edition randomizes the picture arrangement and uses a typed rune sequence instead of the physical well mechanism.":
+		"이 에디션은 그림 배치를 무작위로 섞고, 실제 우물 장치 대신 룬 순서를 입력해요.",
+	"Text riddle and illustrated-word initials with a typed rune lock; randomized pictures and three mistakes replace the physical well and timer.":
+		"글 수수께끼, 그림 단어의 첫 글자, 입력식 룬 자물쇠. 실제 우물과 타이머 대신 무작위 그림 배치와 실수 3번.",
+	"Answer the entrance riddle.": "입구의 수수께끼에 답하세요.",
+	"Enter the rune sequence to open the safe.": "룬 순서를 입력해 금고를 여세요.",
+	"What is always coming, but never arrives?": "늘 오고 있지만 결코 도착하지 않는 것은? (답은 영어 단어로 입력)",
+	"Spell FIND THE KEY with the pictures’ initials.": "그림의 영어 이름 첫 글자로 FIND THE KEY를 만드세요.",
+	"Open the safe with your rune sequence": "모은 룬 순서로 금고를 여세요",
+	riddle: "수수께끼",
+	pictures: "그림",
+	lock: "자물쇠",
+	done: "완료",
+	"Chances: {#n}": "남은 기회: {n}",
+	"Rune sequence: {runes}": "룬 순서: {runes}",
+	"Rune sequence: ": "룬 순서: ",
+	"Riddle answer": "수수께끼 답 (영어)",
+	"Rune numbers joined with hyphens": "하이픈(-)으로 이은 룬 번호",
+	"Collected runes": "모은 룬",
+	"Set the safe’s runes": "금고의 룬 맞추기",
+	"Open safe": "금고 열기",
+	"Rune {#n}": "룬 {n}",
+	"The entrance opened.": "입구가 열렸어요.",
+	"The entrance stayed closed.": "입구가 열리지 않았어요.",
+	"That initial does not fit the message.": "그 첫 글자는 문구에 맞지 않아요.",
+	// One entry per picture, so a translation of "Fox" or "Owl" elsewhere cannot reach into these lines.
+	"{#n} · Fox": "{n} · Fox",
+	"{#n} · Ink": "{n} · Ink",
+	"{#n} · Nest": "{n} · Nest",
+	"{#n} · Deer": "{n} · Deer",
+	"{#n} · Torch": "{n} · Torch",
+	"{#n} · Hat": "{n} · Hat",
+	"{#n} · Elm": "{n} · Elm",
+	"{#n} · Key": "{n} · Key",
+	"{#n} · Yak": "{n} · Yak",
+	"{#n} · Moon": "{n} · Moon",
+	"{#n} · Owl": "{n} · Owl",
+	"{#n} · Bat": "{n} · Bat",
+	"Fox added rune {#n}.": "Fox 그림으로 룬 {n} 추가.",
+	"Ink added rune {#n}.": "Ink 그림으로 룬 {n} 추가.",
+	"Nest added rune {#n}.": "Nest 그림으로 룬 {n} 추가.",
+	"Deer added rune {#n}.": "Deer 그림으로 룬 {n} 추가.",
+	"Torch added rune {#n}.": "Torch 그림으로 룬 {n} 추가.",
+	"Hat added rune {#n}.": "Hat 그림으로 룬 {n} 추가.",
+	"Elm added rune {#n}.": "Elm 그림으로 룬 {n} 추가.",
+	"Key added rune {#n}.": "Key 그림으로 룬 {n} 추가.",
+	"Yak added rune {#n}.": "Yak 그림으로 룬 {n} 추가.",
+	"Moon added rune {#n}.": "Moon 그림으로 룬 {n} 추가.",
+	"Owl added rune {#n}.": "Owl 그림으로 룬 {n} 추가.",
+	"Bat added rune {#n}.": "Bat 그림으로 룬 {n} 추가.",
+	"The safe opened.": "금고가 열렸어요.",
+	"The rune sequence did not fit.": "룬 순서가 맞지 않았어요.",
+
+	// Count the Cubes and Count the Rectangles: three solo counting trials each.
+	"Count every solid cube in the pile. Stacks have no gaps or floating cubes.":
+		"더미에 있는 큐브를 모두 세세요. 쌓인 큐브 사이에 빈틈이나 떠 있는 큐브는 없어요.",
+	"Turn the pile to inspect all four sides. Cubes hidden underneath still count.":
+		"더미를 돌려 네 면을 모두 살펴보세요. 아래에 가려진 큐브도 세야 해요.",
+	"Coven adaptation: 3 untimed piles, one answer per pile. Solve at least 2 to win; no live buzzer race.":
+		"모임 각색: 시간 제한 없는 더미 3개, 더미마다 답은 한 번. 2개 이상 맞히면 승리. 실시간 버저 경쟁 없음.",
+	"Count all axis-aligned rectangles whose cells sum to the target, including single cells.":
+		"칸의 합이 목표와 같은 직사각형을 모두 세세요. 격자선을 따르는 직사각형만 세고, 한 칸짜리도 포함해요.",
+	"Blank cells count as 0. Rectangles may overlap, and negative numbers count normally.":
+		"빈칸은 0이에요. 직사각형은 서로 겹쳐도 되고, 음수도 그대로 더해요.",
+	"Coven adaptation: 3 untimed 4×4 puzzles, one answer per puzzle. Solve at least 2 to win; no team buzzer or threshold rounds.":
+		"모임 각색: 시간 제한 없는 4×4 퍼즐 3개, 퍼즐마다 답은 한 번. 2개 이상 맞히면 승리. 팀 버저와 기준 점수 라운드 없음.",
+	"Solo, 3 untimed piles; rotate the solid stacks to inspect them.":
+		"1인용, 시간 제한 없는 더미 3개. 큐브 더미를 돌려 가며 살펴봐요.",
+	"Solo, 3 untimed 4×4 exact-sum puzzles; no buzzer or team scoring.":
+		"1인용, 시간 제한 없는 4×4 합 맞추기 퍼즐 3개. 버저와 팀 점수 없음.",
+	"Enter a whole number from 0 to 9999.": "0부터 9999까지의 정수를 입력하세요.",
+	"This trial is over.": "이 시험은 끝났어요.",
+	"This is a solo trial.": "혼자 하는 시험이에요.",
+	"Choose Answer, or turn a cube pile.": "답을 입력하거나 큐브 더미를 돌리세요.",
+	"Trial {#n}: {#answer}. Correct.": "시험 {n}: {answer}. 정답.",
+	"Trial {#n}: {#answer}. The answer was {#expected}.": "시험 {n}: {answer}. 정답은 {expected}.",
+	"Count the cubes": "큐브 세기",
+	"Count the rectangles": "직사각형 세기",
+	"Trials complete": "시험 종료",
+	"How many cubes are in this pile?": "이 더미에 큐브가 몇 개 있나요?",
+	"How many rectangles sum to {#n}?": "합이 {n}인 직사각형은 몇 개인가요?",
+	"Your answers are recorded below.": "내 답은 아래에 기록돼 있어요.",
+	"Solve at least 2 of 3 to win.": "3개 중 2개 이상 맞히면 승리해요.",
+	"Trial progress": "시험 진행",
+	"Trial {#n}": "시험 {n}",
+	"Trial {#n}, answered": "시험 {n}, 답변 완료",
+	"Target sum": "목표 합",
+	"Turn pile": "더미 돌리기",
+	"Your count": "내가 센 수",
+	"Blank, zero": "빈칸, 0",
+
+	// Memory Poker: memorise 16 cards, pick 2 blind to join 3 community cards.
+	"Memorize the 4×4 array of 16 cards, then choose Hide cards. The 3 community cards appear when everyone is ready.":
+		"4×4로 놓인 카드 16장을 외운 뒤 ‘카드 숨기기’를 누르세요. 모두 준비되면 공용 카드 3장이 나와요.",
+	"Select 2 different hidden positions. Those cards and the community cards form your 5-card poker hand. Players may choose the same positions.":
+		"숨겨진 자리 중 서로 다른 2곳을 고르세요. 그 카드 2장과 공용 카드로 5장짜리 포커 패를 만들어요. 여러 마법사가 같은 자리를 골라도 돼요.",
+	"Poker order: straight flush, four of a kind, full house, flush, straight, three of a kind, two pair, pair, high card. Ties compare ranks, then kickers. Aces may be low in A–2–3–4–5.":
+		"족보 순서: 스트레이트 플러시, 포카드, 풀하우스, 플러시, 스트레이트, 트리플, 투페어, 원페어, 하이카드. 같은 족보면 숫자, 그다음 키커를 비교해요. A–2–3–4–5에서는 A를 가장 낮게 쓸 수 있어요.",
+	"Coven adaptation: 5 untimed rounds for 2–5 players. The strongest hand earns 1 point; tied strongest hands all score. Bots choose from concealed positions without seeing the cards.":
+		"모임 각색: 2–5명, 시간 제한 없는 5라운드. 가장 강한 패가 1점을 얻고, 동률이면 모두 점수를 받아요. 봇은 카드를 보지 않고 숨겨진 자리에서 골라요.",
+	"Untimed memory and 5 scored rounds for 2–5 players; tied best hands share a point.":
+		"2–5명, 시간 제한 없는 암기와 5라운드 점수제. 가장 강한 패가 동률이면 모두 1점.",
+	"Wait for your next memory turn.": "다음 내 차례를 기다리세요.",
+	"Memorize the cards, then hide them.": "카드를 외운 뒤 숨기세요.",
+	"Pick 2 hidden cards.": "숨겨진 카드 2장을 고르세요.",
+	"Choose exactly 2 different card positions.": "서로 다른 카드 자리를 정확히 2곳 고르세요.",
+	"{#n}: {rank} leaves": "{n}: 잎 {rank}",
+	"{#n}: {rank} stars": "{n}: 별 {rank}",
+	"{#n}: {rank} flames": "{n}: 불꽃 {rank}",
+	"{#n}: {rank} moons": "{n}: 달 {rank}",
+	"Round {#n}. Community: {first}, {second}, {third}.": "{n}라운드. 공용 카드: {first}, {second}, {third}.",
+	"Mage {#n}: {first} + {second}.": "마법사 {n}: {first} + {second}.",
+	"Mage {#n}: {first} + {second} · scored 1.": "마법사 {n}: {first} + {second} · 1점 획득.",
+	"Community: {first} / {second} / {third}": "공용 카드: {first} / {second} / {third}",
+	"Choose from memory": "기억으로 고르기",
+	Memorize: "외우기",
+	"Pick 2 positions to complete your hand.": "자리 2곳을 골라 패를 완성하세요.",
+	"Waiting for the other mages to hide their cards.": "다른 마법사들이 카드를 숨기기를 기다리는 중이에요.",
+	"Remember the ranks and suits before hiding the cards.": "카드를 숨기기 전에 숫자와 무늬를 외우세요.",
+	"Compare your scores.": "점수를 비교해 보세요.",
+	"Your picks are sealed.": "내 선택이 봉인됐어요.",
+	"The same positions can be selected by multiple players.": "여러 마법사가 같은 자리를 골라도 돼요.",
+	"Community cards": "공용 카드",
+	"Hide cards": "카드 숨기기",
+	"Card {#n}": "카드 {n}",
+	"Choose 2 card positions": "카드 자리 2곳을 고르세요",
+	"Seal pair": "두 장 봉인",
+
+	// Lay the Grass: draft a patch and a stance, then fit it in the 6×6 garden.
+	"Draft a patch publicly, lowest score first. Patch values are 1, 3, 5, 7, 9, 11 and 13. Different players may draft the same patch.":
+		"점수가 낮은 마법사부터 공개적으로 조각을 드래프트해요. 조각 값은 1, 3, 5, 7, 9, 11, 13이에요. 여러 마법사가 같은 조각을 골라도 돼요.",
+	"Choose aggressive for double points if placed and −4 if blocked, or defensive to trim up to 2 squares from the patch's end before placing.":
+		"공격을 고르면 놓았을 때 점수가 두 배, 못 놓으면 −4점이에요. 수비를 고르면 놓기 전에 조각 끝에서 2칸까지 다듬을 수 있어요.",
+	"Smaller-value patches place first. Rotate freely; patches cannot overlap or leave the garden. If no orientation fits, pass.":
+		"값이 작은 조각부터 놓아요. 회전은 자유예요. 조각은 겹치거나 정원 밖으로 나갈 수 없어요. 어느 방향으로도 들어가지 않으면 패스하세요.",
+	"Coven adaptation: 3 drafts on one 6×6 garden with original patch shapes. No flipping. The show's 114-square park, pairing, containment and terrain selections are omitted.":
+		"모임 각색: 6×6 정원 하나에서 드래프트 3번, 조각 모양은 자체 제작. 뒤집기 없음. 방송의 114칸 공원, 짝짓기, 가두기, 지형 선택은 뺐어요.",
+	"Compact 6×6 garden, original patches, 3 drafts. Retains ascending placement and aggressive/defensive choices; omits terrain and alliance selections.":
+		"작은 6×6 정원, 자체 제작 조각, 드래프트 3번. 작은 값부터 놓는 순서와 공격/수비 선택은 유지하고, 지형과 동맹 선택은 뺐어요.",
+	"Wait for your garden turn.": "정원에서 내 턴을 기다리세요.",
+	"Choose a patch and aggressive or defensive play.": "조각을 고르고 공격이나 수비를 정하세요.",
+	"Only defensive patches may trim 0 to 2 squares.": "수비 조각만 0–2칸을 다듬을 수 있어요.",
+	"Your patch still fits. Rotate or trim it first.": "조각을 아직 놓을 수 있어요. 먼저 돌리거나 다듬어 보세요.",
+	"Place the patch inside empty garden squares.": "조각은 정원의 빈칸 안에 놓으세요.",
+	"Mage {#n}: planted patch {#value}, {gain} points.": "마법사 {n}: 조각 {value} 심음, {gain}점.",
+	"Mage {#n}: passed patch {#value}, {gain} points.": "마법사 {n}: 조각 {value} 패스, {gain}점.",
+	"Draft a patch": "조각 드래프트",
+	"Place your patch": "조각 놓기",
+	"Garden complete": "정원 완성",
+	"Choose your patch and stance.": "조각과 태세를 고르세요.",
+	"The garden is full of plans.": "정원이 계획으로 가득 찼어요.",
+	"Rotate or trim your patch, then choose its top-left corner.":
+		"조각을 돌리거나 다듬은 뒤 왼쪽 위 모서리가 놓일 칸을 고르세요.",
+	"Patch values: 1 / 3 / 5 / 7 / 9 / 11 / 13.": "조각 값: 1 / 3 / 5 / 7 / 9 / 11 / 13.",
+	"Patch {#value}: {rows}. Rows run left to right; dots are gaps.":
+		"조각 {value}: {rows}. 각 줄은 왼쪽에서 오른쪽으로 읽고, 점은 빈칸이에요.",
+	"Mage {#n}: patch {#value}, {stance}.": "마법사 {n}: 조각 {value}, {stance}.",
+	aggressive: "공격",
+	defensive: "수비",
+	"Rotation {#degrees}°, trimmed {#trim}. Shape rows: {rows}": "회전 {degrees}°, 다듬은 칸 {trim}. 모양: {rows}",
+	"Patch {#value}": "조각 {value}",
+	"Choose a patch": "조각을 고르세요",
+	"Choose a stance": "태세를 고르세요",
+	"Aggressive · double or −4": "공격 · 두 배 또는 −4",
+	"Defensive · may trim": "수비 · 다듬기 가능",
+	"Rotate patch": "조각 돌리기",
+	"Trim {#n}": "{n}칸 다듬기",
+	"Pass patch": "조각 패스",
+	"Your patch": "내 조각",
+	"Plant patch": "조각 심기",
+
+	// Heavy 13: sealed weights and chips, three stands that break at 13.
+	// "Moon" alone is also a Find the Key picture, so the moon chip is translated only inside a sentence.
+	"You have cards 0–6, 2 chips of each of 3 colors, and 1 rainbow chip. Seal one unused card and chip each round.":
+		"카드 0–6, 세 가지 색 칩 2개씩, 무지개 칩 1개를 가지고 시작해요. 라운드마다 아직 쓰지 않은 카드 1장과 칩 1개를 봉인하세요.",
+	"Rainbow chips place first, then higher cards. Ties follow clockwise order from the first mage. A colored chip fixes your stand; rainbow chooses a stand on placement.":
+		"무지개 칩이 먼저 놓고, 그다음은 높은 카드 순이에요. 동률이면 첫 마법사부터 시계 방향 순서를 따라요. 색 칩은 놓을 받침대를 정해 버리고, 무지개 칩은 놓을 때 받침대를 골라요.",
+	"You may pass once if another unpassed mage remains. Passed mages place after the others, in reverse pass order.":
+		"아직 패스하지 않은 다른 마법사가 남아 있으면 한 번 패스할 수 있어요. 패스한 마법사는 나머지가 놓은 뒤, 패스한 순서의 반대로 놓아요.",
+	"A stand reaching 13 or more loses every old stone. You lose 1 point per removed stone, including zeros; your new stone stays. The last penalized mage starts the next round.":
+		"받침대의 합이 13 이상이 되면 원래 있던 돌이 모두 치워져요. 치워진 돌 하나마다 1점을 잃고(0짜리 돌 포함), 새로 놓은 돌은 남아요. 마지막으로 벌점을 받은 마법사가 다음 라운드를 시작해요.",
+	"Coven adaptation: 7 rounds for 3–5 mages, no enforced deadline. Highest score wins; equal scores favor the mage whose most recent penalty occurred earlier.":
+		"모임 각색: 마법사 3–5명, 7라운드, 제한 시간 없음. 점수가 가장 높으면 이기고, 동점이면 마지막 벌점을 더 일찍 받은 마법사가 이겨요.",
+	"7 untimed rounds for 3–5 players. Colored chips, rainbow priority, deferred placement and threshold penalties retained.":
+		"3–5명, 시간 제한 없는 7라운드. 색 칩, 무지개 우선권, 패스 후 나중에 놓기, 13 벌점은 그대로예요.",
+	"Wait for your stone turn.": "돌을 놓을 내 턴을 기다리세요.",
+	"Choose an available weight and chip.": "쓸 수 있는 무게와 칩을 고르세요.",
+	"That card or chip was already spent.": "이미 쓴 카드나 칩이에요.",
+	"You may pass once before the last unpassed mage.":
+		"패스는 한 번만, 패스하지 않은 마법사가 뒤에 남아 있을 때 할 수 있어요.",
+	"Choose one of the 3 stands.": "받침대 3개 중 하나를 고르세요.",
+	"Your colored chip fixes the stand.": "색 칩을 냈다면 그 색 받침대에만 놓을 수 있어요.",
+	Ember: "불씨",
+	Moss: "이끼",
+	Rainbow: "무지개",
+	"Round {#round}: {bids}.": "{round}라운드: {bids}.",
+	// One entry per chip: a {chip} hole would swallow the rest of the "; " list.
+	"Mage {#n} {#weight} / Ember": "마법사 {n}: {weight} / 불씨",
+	"Mage {#n} {#weight} / Moss": "마법사 {n}: {weight} / 이끼",
+	"Mage {#n} {#weight} / Rainbow": "마법사 {n}: {weight} / 무지개",
+	"Mage {#n} {#weight} / Moon": "마법사 {n}: {weight} / 달",
+	"Mage {#n} passed.": "마법사 {n}: 패스.",
+	"Mage {#n}: {#weight} on {stand}.": "마법사 {n}: {stand} 받침대에 {weight}.",
+	"Mage {#n}: {#weight} on Moon.": "마법사 {n}: 달 받침대에 {weight}.",
+	"Mage {#n}: {#weight} on {stand}, −{#penalty} points.": "마법사 {n}: {stand} 받침대에 {weight}, −{penalty}점.",
+	"Mage {#n}: {#weight} on Moon, −{#penalty} points.": "마법사 {n}: 달 받침대에 {weight}, −{penalty}점.",
+	"Place on {stand} ({#sum} + {#weight})": "{stand} 받침대에 놓기 ({sum} + {weight})",
+	"Place on Moon ({#sum} + {#weight})": "달 받침대에 놓기 ({sum} + {weight})",
+	"Pass once": "한 번 패스",
+	"Choose a weight": "무게를 고르세요",
+	"Weight {#n}": "무게 {n}",
+	"Choose a chip": "칩을 고르세요",
+	"Place stones": "돌 놓기",
+	"Seal stones": "돌 봉인",
+	"The lightest burden wins.": "짐이 가장 가벼운 마법사가 이겨요.",
+	"Place your revealed stone, or pass once if allowed.": "공개된 돌을 놓으세요. 가능하면 한 번 패스할 수 있어요.",
+	"Your stone and chip are sealed.": "돌과 칩을 봉인했어요.",
+	"Choose a weight and a chip together.": "무게와 칩을 함께 고르세요.",
+	"Moon · {#sum} / 13": "달 · {sum} / 13",
+	"{stand}: [{stones}] = {#sum} / 13.": "{stand}: [{stones}] = {sum} / 13.",
+	"{stand}: [] = {#sum} / 13.": "{stand}: [] = {sum} / 13.",
+	"Moon: [{stones}] = {#sum} / 13.": "달: [{stones}] = {sum} / 13.",
+	"Moon: [] = {#sum} / 13.": "달: [] = {sum} / 13.",
+	"Your chips: {chips}.": "내 칩: {chips}.",
+	"Ember {#n}": "불씨 {n}",
+	"Moss {#n}": "이끼 {n}",
+	"Moon {#n}": "달 {n}",
+	"Rainbow {#n}": "무지개 {n}",
+	"Mage {#n}: {#weight}, {chip}.": "마법사 {n}: {weight}, {chip}.",
+	"Mage {#n}: {#weight}, Moon.": "마법사 {n}: {weight}, 달.",
+	"Mage {#n}: sealed.": "마법사 {n}: 봉인 완료.",
+	"Mage {#n}: choosing.": "마법사 {n}: 고르는 중.",
+	"Order: {mages}.": "순서: {mages}.",
+
+	// Mystery Stock Market: seven invented stocks, hidden price rules.
+	"Trade 7 fictional stocks over 8 rounds. Start with 10,000 game coins; each stock starts at 1,000 and cannot fall below 100.":
+		"가상의 주식 7종목을 8라운드 동안 거래해요. 게임 코인 10,000개로 시작하고, 모든 종목은 1,000에서 시작해 100 아래로는 떨어지지 않아요.",
+	"Each round, seal one buy, sell, hold or study order. Orders use the current price and settle together. Study costs 100 and reveals one price rule privately.":
+		"라운드마다 매수, 매도, 보유, 조사 중 하나를 봉인해 주문해요. 주문은 현재 가격으로 한꺼번에 정산돼요. 조사는 100코인이 들고, 가격 규칙 하나를 나에게만 알려 줘요.",
+	"Price histories are public. Rule fragments appear after round 2; all rules are disclosed after round 4. Total cash plus shares at the last price determines the winner.":
+		"가격 기록은 모두에게 공개돼요. 2라운드가 끝나면 규칙의 단서가, 4라운드가 끝나면 모든 규칙이 공개돼요. 코인과 마지막 가격으로 계산한 주식 가치의 합으로 승자를 가려요.",
+	"HOUSE VARIANT: the show's market deduction concept is retained, but these company names, price formulas, 8-round schedule and one-order limit are original. No Pieces, secrets or real money.":
+		"하우스 룰: 시장을 추리한다는 방송의 구상은 살렸지만 회사 이름, 가격 공식, 8라운드 일정, 라운드당 주문 1개 제한은 자체 제작이에요. 피스도, 비밀도, 실제 돈도 없어요.",
+	"HOUSE VARIANT: original 7 stocks and price formulas, 8 rounds and one sealed order per round. Retains hidden-rule deduction and portfolio valuation.":
+		"하우스 룰: 자체 제작한 7종목과 가격 공식, 8라운드, 라운드당 봉인 주문 1개. 숨은 규칙 추리와 보유 자산 평가는 유지했어요.",
+	"You already sealed an order, or the market is closed.": "이미 주문을 봉인했거나 장이 끝났어요.",
+	"Study an unknown rule before round 5, with 100 coins available.":
+		"조사는 5라운드 전에, 아직 모르는 규칙에 대해, 100코인이 있을 때만 할 수 있어요.",
+	"Choose a stock and a positive whole share quantity.": "종목과 1 이상의 정수 수량을 고르세요.",
+	"You do not have enough coins for those shares.": "그만큼 살 코인이 부족해요.",
+	"You cannot sell more shares than you own.": "가진 것보다 많이 팔 수는 없어요.",
+	Candlewick: "캔들윅",
+	Moonleaf: "문리프",
+	Thornsteel: "손스틸",
+	Mossworks: "모스웍스",
+	Foxglove: "폭스글로브",
+	Nightjar: "나이트자",
+	Bramble: "브램블",
+	"{stock} rule: {rule}..": "{stock} 규칙: {rule}.",
+	"{stock} rule: hidden.": "{stock} 규칙: 비공개.",
+	"Alternates +120 and −80 each round": "라운드마다 +120과 −80이 번갈아 적용돼요",
+	"Rises 30 for each share bought this round; falls 60 if none are bought":
+		"이번 라운드에 매수된 1주마다 30 오르고, 매수가 없으면 60 내려요",
+	"Falls 40 per net share bought; rises 40 per net share sold": "순매수 1주마다 40 내리고, 순매도 1주마다 40 올라요",
+	"Rises 90 if Candlewick rose last round; otherwise falls 50":
+		"지난 라운드에 캔들윅이 올랐으면 90 오르고, 아니면 50 내려요",
+	"Rises 160 every third round; otherwise falls 40": "3라운드마다 160 오르고, 나머지 라운드에는 40 내려요",
+	"Rises 70 when fewer than 4 shares are held; otherwise falls 35":
+		"모두가 보유한 주식이 4주 미만이면 70 오르고, 아니면 35 내려요",
+	"Moves opposite to Moonleaf's last change, with a limit of 150": "문리프의 직전 변동과 반대로 움직여요(최대 150)",
+	"Round parity matters": "홀수 라운드인지 짝수 라운드인지가 중요해요",
+	"Buying matters": "매수가 영향을 줘요",
+	"Buying can hurt": "매수가 독이 될 수 있어요",
+	"Watch Candlewick": "캔들윅을 지켜보세요",
+	"A 3-round rhythm": "3라운드 주기",
+	"Total holdings matter": "전체 보유량이 중요해요",
+	"Watch Moonleaf": "문리프를 지켜보세요",
+	"Round {#n} settled.": "{n}라운드 정산 완료.",
+	"{stock}: {#price} ({change}).": "{stock}: {price} ({change}).",
+	"Hold coins": "코인 보유",
+	"Buy 1 {stock}": "{stock} 1주 매수",
+	"Buy max {stock}": "{stock} 최대 매수",
+	"Sell all {stock}": "{stock} 전량 매도",
+	"Study {stock} · 100": "{stock} 조사 · 100",
+	"Choose a stock or hold": "종목을 고르거나 보유하세요",
+	"Buy shares": "주식 매수",
+	"Sell shares": "주식 매도",
+	"Study rule · 100 coins": "규칙 조사 · 100코인",
+	"Choose a quantity": "수량을 고르세요",
+	"{#shares} shares · {#cost} coins": "{shares}주 · {cost}코인",
+	"Buy {stock} · {#price} coins each": "{stock} 매수 · 1주당 {price}코인",
+	"Sell {stock} · {#price} coins each": "{stock} 매도 · 1주당 {price}코인",
+	"Choose a stock": "종목을 고르세요",
+	"Seal order": "주문 봉인",
+	Shares: "주식 수",
+	"Your purse": "내 지갑",
+	"{#n} game coins": "게임 코인 {n}개",
+	"Market closed": "장 마감",
+	"Trading floor": "거래소",
+	"Seal one trade, hold your coins, or study a price rule.":
+		"거래 하나를 봉인하거나, 코인을 보유하거나, 가격 규칙을 조사하세요.",
+	"Your shares have been valued at the closing prices.": "보유 주식을 마감 가격으로 평가했어요.",
+	"Your order is sealed.": "주문을 봉인했어요.",
+	"Your coins: {#n}. These are game coins.": "내 코인: {n}. 게임 안에서만 쓰는 코인이에요.",
+	"{stock}: {#price} coins, you hold {#held}. History {history}.":
+		"{stock}: {price}코인, 보유 {held}주. 가격 기록 {history}.",
+
+	// Russian Roulette: cursed chambers, credits spent on looking, rotating and tampering.
+	"Each seat faces a chamber. Two chambers are cursed. Start with 16 game credits. Survive when half the players, rounded up, spend all credits.":
+		"자리마다 약실이 하나씩 마주 놓여 있고, 그중 2개에 저주가 걸려 있어요. 게임 크레딧 16개로 시작해요. 마법사의 절반(올림)이 크레딧을 다 쓰면 게임이 끝나고, 그때 내 약실이 안전하면 살아남아요.",
+	"Open investigation costs 1: reveal 2 adjacent chambers publicly. Hidden investigation costs 2: only you see them. Rotate clockwise by 1 for 3 credits, or by 2 for 4.":
+		"공개 조사는 1크레딧: 이웃한 약실 2개를 모두에게 공개해요. 비공개 조사는 2크레딧: 나만 봐요. 시계 방향 회전은 1칸에 3크레딧, 2칸에 4크레딧이에요.",
+	"Tamper contributes 1–3 credits to a shared pool. Landing exactly on 6 secretly swaps two adjacent chambers and clears the pool; exceeding 6 clears it without a swap. Old observations may be stale after hidden actions.":
+		"조작은 공동 풀에 1–3크레딧을 보태요. 풀이 정확히 6이 되면 이웃한 약실 2개가 몰래 서로 바뀌고 풀이 비워져요. 6을 넘으면 바뀌는 것 없이 풀만 비워져요. 비공개 행동이 있은 뒤에는 예전에 본 정보가 틀릴 수 있어요.",
+	"The first mage shifts clockwise each round. Empty purses are skipped. All actions use game tokens; cursed seats lose and safe seats share victory.":
+		"첫 마법사는 라운드마다 시계 방향으로 넘어가요. 크레딧이 없는 마법사는 건너뛰어요. 모든 행동은 게임 토큰으로 해요. 저주받은 자리는 지고, 안전한 자리는 함께 이겨요.",
+	"Coven adaptation: 3–5 chambers instead of 6, no enforced deadline, persistent private notes, and curse markers instead of weapons. The investigation, rotation and pooled tampering mechanics follow the show.":
+		"모임 각색: 약실은 6개 대신 3–5개, 제한 시간 없음, 개인 메모는 계속 남고, 무기 대신 저주 표식을 써요. 조사, 회전, 공동 풀 조작 방식은 방송을 따라요.",
+	"3–5 curse chambers, 16 credits and private notes. Public/private investigation, clockwise rotation and pooled tampering; no weapons.":
+		"저주 약실 3–5개, 16크레딧, 개인 메모. 공개/비공개 조사, 시계 방향 회전, 공동 풀 조작. 무기 없음.",
+	"Wait for your chamber turn.": "약실에서 내 턴을 기다리세요.",
+	"Choose a chamber and its clockwise neighbor.": "약실 하나와 그 시계 방향 옆 약실을 고르세요.",
+	"Rotate by 1 or 2 chambers.": "1칸 또는 2칸만 회전할 수 있어요.",
+	"Contribute 1–3 credits and choose an adjacent chamber pair.": "1–3크레딧을 보태고 이웃한 약실 쌍을 고르세요.",
+	"Choose an existing chamber pair.": "있는 약실 쌍을 고르세요.",
+	"Choose investigation, rotation or tampering.": "조사, 회전, 조작 중에서 고르세요.",
+	"You do not have enough credits for that action.": "그 행동을 하기에는 크레딧이 부족해요.",
+	curse: "저주",
+	safe: "안전",
+	"Mage {#n} revealed {#a}: {first}, {#b}: {second}.": "마법사 {n}의 공개 조사: {a}번 {first}, {b}번 {second}.",
+	"Mage {#n} made a hidden action.": "마법사 {n}: 비공개 행동.",
+	"Mage {#n} rotated {#steps} clockwise.": "마법사 {n}: 시계 방향으로 {steps}칸 회전.",
+	"Open {#a}–{#b} · 1": "{a}–{b} 공개 조사 · 1",
+	"Peek {#a}–{#b} · 2": "{a}–{b} 비공개 조사 · 2",
+	"Rotate {#steps} · {#cost}": "{steps}칸 회전 · {cost}",
+	"Tamper {#amount} · pair {#a}–{#b}": "조작 {amount} · {a}–{b} 쌍",
+	"Open pair · 1 credit": "공개 조사 · 1크레딧",
+	"Peek pair · 2 credits": "비공개 조사 · 2크레딧",
+	"Rotate chambers": "약실 회전",
+	Tamper: "조작",
+	"Choose a contribution": "보탤 크레딧을 고르세요",
+	"{#n} credits": "{n}크레딧",
+	"Choose a rotation": "회전할 칸 수를 고르세요",
+	"{#steps} clockwise · {#cost} credits": "시계 방향 {steps}칸 · {cost}크레딧",
+	"Choose adjacent chambers": "이웃한 약실을 고르세요",
+	"Chambers {#a} and {#b}": "약실 {a}번과 {b}번",
+	"Chambers revealed": "약실 공개",
+	"Chambers in play": "약실 진행 중",
+	"Your chamber was cursed.": "내 약실은 저주받았어요.",
+	"Your chamber was safe.": "내 약실은 안전했어요.",
+	"Track the chambers and protect your seat.": "약실의 움직임을 따라가며 내 자리를 지키세요.",
+	"You face chamber {#n}. Your credits: {#credits}.": "내 앞은 {n}번 약실. 내 크레딧: {credits}.",
+	"Shared tamper pool: {#n} / 6.": "공동 조작 풀: {n} / 6.",
+	"Your notes follow public rotations. A hidden action may have changed a remembered chamber.":
+		"내 메모는 공개된 회전을 따라 움직여요. 비공개 행동 때문에 기억한 약실이 바뀌었을 수 있어요.",
+	"{#n}: curse": "{n}: 저주",
+	"{#n}: safe": "{n}: 안전",
+	"{#n}: last seen curse": "{n}: 저주 (마지막 확인)",
+	"{#n}: last seen safe": "{n}: 안전 (마지막 확인)",
+}

@@ -1,0 +1,59 @@
+.classic-flow {
+	display: grid;
+	justify-items: center;
+	gap: 1rem;
+}
+.classic-confirm {
+	display: grid;
+	justify-items: center;
+	gap: 0.6rem;
+	margin-top: 1rem;
+	text-align: center;
+}
+.classic-confirm p,
+.classic-help {
+	margin: 0;
+	font-size: 0.9rem;
+}
+.classic-help {
+	text-align: center;
+	margin-block: 0.65rem;
+}
+.classic-ghost {
+	opacity: 0.55;
+}
+.tc-cell.classic-preview {
+	outline: 3px solid var(--paper);
+	outline-offset: -4px;
+}
+.lc-candle.classic-snuff {
+	background: var(--paper-dim);
+	border-radius: 12px;
+	outline: 2px dashed var(--ink);
+	outline-offset: -2px;
+}
+.lc-candle.classic-snuff .candle-flame {
+	opacity: 0.35;
+}
+.rc-edit-slot {
+	padding: 0;
+	border: 0;
+	background: transparent;
+	border-radius: 8px;
+	display: inline-grid;
+	place-items: center;
+	cursor: pointer;
+}
+.rc-edit-slot.is-selected {
+	outline: 3px solid var(--ink);
+	outline-offset: 3px;
+}
+.rc-edit-slot:disabled {
+	cursor: default;
+}
+.classic-claim {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+}

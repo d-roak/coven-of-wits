@@ -1,0 +1,721 @@
+.playing-card {
+	flex: none;
+	width: 76px;
+	height: 108px;
+	overflow: visible;
+	color: var(--ink);
+	filter: drop-shadow(0 3px 0 var(--paper-dim));
+}
+.playing-card.is-red {
+	color: var(--ember-deep);
+}
+.card-body {
+	fill: var(--glint);
+	stroke: var(--ink);
+	stroke-width: 2.5;
+}
+.playing-card.is-toned .card-body {
+	fill: color-mix(in srgb, var(--c) 60%, var(--glint));
+}
+.playing-card g,
+.playing-card text {
+	fill: currentColor;
+}
+.playing-card text {
+	text-anchor: middle;
+	font-family: var(--font-body);
+	font-weight: 900;
+}
+.playing-card .card-numeral {
+	font-family: var(--font-display);
+	font-weight: 400;
+}
+.card-vein {
+	fill: none;
+	stroke: var(--glint);
+	stroke-width: 0.9;
+	stroke-linecap: round;
+}
+.card-frame {
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 1;
+	opacity: 0.35;
+}
+/* Face down: the back must give nothing away, so it ignores seat tone and suit colour. */
+.playing-card.is-back {
+	color: var(--paper);
+}
+.is-back .card-body {
+	fill: var(--hill-1);
+}
+.card-lattice {
+	opacity: 0.4;
+}
+.piece-tile,
+.piece-token {
+	width: 56px;
+	min-height: 56px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	background: var(--c, var(--panel));
+	color: var(--ink);
+	border: 2px solid var(--ink);
+	border-radius: var(--radius-s);
+	font-size: 1.7rem;
+	font-weight: 900;
+	box-shadow: 0 3px 0 var(--ink);
+}
+/* A phrase, not a mark: the tile grows sideways instead of spilling out of a square. */
+.piece-tile.is-word {
+	width: auto;
+	min-width: 56px;
+	max-width: 9rem;
+	padding: 6px 10px;
+	font-size: 0.95rem;
+	line-height: 1.2;
+	text-align: center;
+}
+.piece-token {
+	border-radius: 50%;
+	padding: 7px;
+}
+.piece-token svg {
+	width: 36px;
+	height: 36px;
+}
+/* The count rides the rim as a badge, so a counted token stays a disc. */
+.piece-token:has(small) {
+	position: relative;
+	margin-bottom: 9px;
+}
+.piece-token small {
+	position: absolute;
+	bottom: -11px;
+	left: 50%;
+	translate: -50%;
+	padding: 0 7px;
+	font-size: 0.72rem;
+	line-height: 1.5;
+	white-space: nowrap;
+	background: var(--glint);
+	border: 2px solid var(--ink);
+	border-radius: 999px;
+}
+.piece-die {
+	display: inline-flex;
+	padding: 3px;
+	border-radius: 12px;
+	background: var(--c, var(--panel));
+}
+.piece-shape {
+	width: 86px;
+	height: 70px;
+	fill: var(--c, var(--moss));
+	stroke: var(--ink);
+	stroke-width: 1.5px;
+}
+.piece-stack {
+	display: inline-block;
+	width: 42px;
+	height: 45px;
+	position: relative;
+}
+.piece-stack i {
+	position: absolute;
+	left: 2px;
+	width: 36px;
+	height: 24px;
+	border: 2px solid var(--ink);
+	background: var(--c, var(--paper-dim));
+	border-radius: 50%;
+	font-size: 13px;
+	line-height: 20px;
+	font-style: normal;
+}
+.piece-portrait {
+	width: 100px;
+	height: 125px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	background: var(--panel-deep);
+	border: 3px double var(--ink);
+	border-radius: 50% 50% 12px 12px;
+	padding: 8px;
+}
+.portrait-face {
+	width: 62px;
+	height: 62px;
+	color: var(--ink);
+}
+.portrait-cloak {
+	background: var(--c, var(--moon));
+	border: 2px solid var(--ink);
+	border-radius: 50% 50% 10px 10px;
+	width: 65px;
+	padding: 6px;
+	display: grid;
+	place-items: center;
+}
+.portrait-cloak svg {
+	width: 24px;
+	height: 24px;
+}
+.piece-row,
+.piece-options {
+	display: flex;
+	align-items: flex-start;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 12px;
+}
+.piece-row figure {
+	margin: 0;
+	display: grid;
+	gap: 7px;
+	justify-items: center;
+	max-width: 140px;
+}
+.piece-row figcaption,
+.piece-option > span:last-child {
+	font-size: 0.85rem;
+	line-height: 1.3;
+	text-align: center;
+}
+.piece-display {
+	display: grid;
+	gap: 12px;
+}
+.piece-display h3 {
+	text-align: center;
+	font-family: var(--font-body);
+	font-size: 0.9rem;
+	font-weight: 900;
+}
+.piece-option {
+	position: relative;
+	color: var(--ink);
+	background: transparent;
+	border: 2px solid transparent;
+	border-radius: 12px;
+	padding: 6px;
+	min-height: 44px;
+	min-width: 44px;
+	max-width: 155px;
+	display: inline-flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 8px;
+	cursor: pointer;
+	font: inherit;
+}
+.piece-option:hover:not(:disabled) {
+	background: var(--panel);
+}
+.piece-option:active:not(:disabled) {
+	transform: scale(0.98);
+}
+.piece-option.is-selected {
+	background: var(--panel-deep);
+	border-color: var(--ink);
+}
+.piece-option:disabled {
+	cursor: default;
+	opacity: 0.48;
+}
+.piece-option:disabled.is-selected {
+	opacity: 1;
+}
+.choice-draft,
+.move-form,
+.balance-draft {
+	display: grid;
+	gap: 16px;
+	padding: 18px 0;
+	border-top: 1px solid var(--pit);
+}
+.choice-draft h3,
+.move-form h3,
+.balance-draft h3 {
+	font-size: 1.1rem;
+	text-align: center;
+}
+.choice-draft > .btn,
+.move-form > .btn,
+.balance-draft > .btn {
+	justify-self: center;
+}
+.draft-trail {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 8px;
+}
+.draft-trail .btn {
+	font-size: 0.8rem;
+	min-height: 44px;
+}
+.draft-trail small {
+	border: 1px solid;
+	border-radius: 50%;
+	width: 20px;
+	height: 20px;
+}
+.draft-confirm,
+.board-confirm {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+}
+.draft-confirm p,
+.board-confirm p {
+	width: 100%;
+	text-align: center;
+	font-size: 0.9rem;
+}
+.move-fields {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr));
+	gap: 12px;
+}
+.move-fields label {
+	display: grid;
+	gap: 5px;
+	font-size: 0.85rem;
+}
+.move-fields input,
+.move-fields select {
+	min-width: 0;
+	width: 100%;
+	min-height: 44px;
+	border: 2px solid var(--ink);
+	border-radius: 10px;
+	padding: 8px;
+	background: var(--glint);
+	color: var(--ink);
+	font: inherit;
+}
+.selection-tray {
+	display: flex;
+	gap: 10px;
+	list-style: none;
+	flex-wrap: wrap;
+	justify-content: center;
+	padding: 12px;
+	background: var(--panel);
+	border-radius: var(--radius-s);
+}
+.selection-order {
+	position: absolute;
+	top: 0;
+	right: 0;
+	display: grid;
+	place-items: center;
+	border-radius: 50%;
+	border: 2px solid var(--ink);
+	background: var(--gold);
+	color: var(--ink);
+	min-width: 22px;
+	min-height: 22px;
+	font-size: 12px;
+	font-weight: 900;
+}
+.trial-cell {
+	position: relative;
+}
+.trial-cell .playing-card {
+	width: 100%;
+	max-width: 64px;
+	height: auto;
+	aspect-ratio: 0.7;
+	filter: none;
+}
+.trial-cell .piece-token,
+.trial-cell .piece-tile {
+	width: 100%;
+	min-height: 28px;
+	aspect-ratio: 1;
+	box-shadow: none;
+	font-size: 1rem;
+}
+.trial-cell .piece-token svg {
+	width: 58%;
+	height: auto;
+	max-height: 44px;
+}
+.trial-cell .piece-token:has(small) {
+	margin-bottom: 0;
+}
+.trial-cell .piece-token small {
+	bottom: -3px;
+	font-size: 0.62rem;
+	padding: 0 4px;
+	border-width: 1.5px;
+}
+.trial-cell .piece-die {
+	padding: 0;
+}
+.trial-cell .piece-die svg {
+	width: 100%;
+	height: auto;
+}
+.trial-cell.is-selected {
+	outline: 3px solid var(--ember-deep);
+	outline-offset: 1px;
+	z-index: 1;
+}
+.trial-cell.is-preview {
+	background: var(--gold);
+}
+.board-workspace {
+	display: grid;
+	gap: 18px;
+}
+.trial-facts-panel {
+	border-bottom: 1px solid var(--pit);
+	padding-bottom: 10px;
+}
+.trial-facts-panel summary {
+	cursor: pointer;
+	font-size: 0.9rem;
+	min-height: 32px;
+}
+.trial-facts-panel .trial-facts {
+	margin-top: 10px;
+}
+.balance-pans {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 10px;
+}
+.balance-pan {
+	padding: 10px;
+	min-height: 130px;
+	background: var(--panel);
+	border: 2px solid transparent;
+	border-radius: 0 0 40px 40px;
+	text-align: center;
+}
+.balance-pan.is-selected {
+	border-color: var(--ink);
+}
+.pan-weights {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 2px;
+	min-height: 40px;
+}
+.pan-weights .piece-option {
+	padding: 2px;
+	min-width: 30px;
+}
+.pan-weights .piece-token {
+	width: 32px;
+	min-height: 32px;
+	box-shadow: none;
+	font-size: 0.8rem;
+}
+.pan-weights .piece-token svg {
+	width: 18px;
+	height: 18px;
+}
+.scale-illustration {
+	width: 100%;
+	height: 80px;
+}
+.letter-builder {
+	width: 100%;
+	display: grid;
+	gap: 12px;
+}
+.trial-log details {
+	margin-top: 12px;
+}
+.trial-log details ol {
+	max-height: 360px;
+	overflow: auto;
+}
+@media (max-width: 480px) {
+	.piece-options {
+		gap: 6px;
+	}
+	.playing-card {
+		width: 65px;
+		height: 94px;
+	}
+	.piece-option {
+		max-width: 120px;
+	}
+	.choice-draft {
+		padding: 12px 0;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.piece-option:active:not(:disabled) {
+		transform: none;
+	}
+}
+.move-field {
+	display: grid;
+	gap: 8px;
+	align-content: start;
+}
+.move-field fieldset {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+.move-field legend {
+	font-size: 0.9rem;
+	margin-bottom: 8px;
+}
+.skip-field {
+	display: flex !important;
+	align-items: center;
+}
+.skip-field input {
+	width: 20px;
+	min-height: 20px;
+}
+.seat5 {
+	--c: var(--glint);
+}
+.trial-grid.layout-pyramid {
+	grid-template-columns: repeat(8, 1fr);
+}
+.trial-grid.layout-mancala {
+	grid-template-columns: repeat(7, 1fr);
+	border-radius: 60px;
+	padding: 14px;
+	background: var(--panel-deep);
+}
+.layout-mancala .trial-cell {
+	border-radius: 50%;
+	min-height: 50px;
+}
+.trial-grid.layout-bagh {
+	gap: 8px;
+	padding: 8px;
+	background:
+		repeating-linear-gradient(
+			0deg,
+			transparent 0,
+			transparent calc(25% - 2px),
+			var(--pit) calc(25% - 2px),
+			var(--pit) 25%
+		),
+		repeating-linear-gradient(
+			90deg,
+			transparent 0,
+			transparent calc(25% - 2px),
+			var(--pit) calc(25% - 2px),
+			var(--pit) 25%
+		);
+}
+.layout-bagh .trial-cell {
+	border-radius: 50%;
+}
+.trial-grid:has(.playing-card) .trial-cell {
+	aspect-ratio: 0.7;
+	padding: 3px;
+}
+.trial-cell .playing-card {
+	max-width: none;
+	width: 100%;
+	height: 100%;
+	aspect-ratio: auto;
+}
+.trial-grid.layout-bagh {
+	position: relative;
+	gap: 0;
+	padding: 0;
+	background: var(--panel);
+}
+.bagh-lines {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+	stroke: var(--ink);
+	stroke-width: 0.7px;
+}
+.layout-bagh .trial-cell {
+	z-index: 1;
+	background: transparent;
+	margin: 4px;
+}
+.layout-bagh .trial-cell:not(.is-static):hover {
+	background: var(--gold);
+}
+
+/* ---------- layout: play area beside the table details ---------- */
+.trial-play,
+.trial-info {
+	display: grid;
+	gap: 1rem;
+	align-content: start;
+	min-width: 0;
+}
+.stepper {
+	display: grid;
+	grid-template-columns: 44px minmax(0, 1fr) 44px;
+	gap: 6px;
+}
+.stepper input {
+	text-align: center;
+	font-weight: 900;
+	font-size: 1.1rem;
+	/* The buttons replace the browser's own spinner. */
+	appearance: textfield;
+}
+.stepper input::-webkit-inner-spin-button {
+	appearance: none;
+}
+.stepper button {
+	display: grid;
+	place-items: center;
+	color: var(--ink);
+	background: var(--panel);
+	border: 2px solid var(--ink);
+	border-radius: 10px;
+	cursor: pointer;
+}
+.stepper button:hover:not(:disabled) {
+	background: var(--gold);
+}
+.stepper button:disabled {
+	opacity: 0.45;
+	cursor: default;
+}
+/* Sized by the column the table gives it, not the window: the rail takes its share first. */
+@container table-main (min-width: 46rem) {
+	.trial {
+		width: 100%;
+	}
+	.trial.has-side {
+		grid-template-columns: minmax(0, 1fr) minmax(16rem, 22rem);
+		column-gap: 1.5rem;
+		align-items: start;
+	}
+	.trial-heading {
+		grid-area: 1 / 1 / 2 / -1;
+	}
+	.trial-scores {
+		grid-area: 2 / 1 / 3 / -1;
+	}
+	.has-side > .trial-play {
+		grid-area: 3 / 1 / 5 / 2;
+	}
+	.trial-info {
+		grid-area: 3 / 2;
+	}
+	.trial-log {
+		grid-area: 4 / 2;
+	}
+	.trial:not(.has-side) > .trial-play {
+		width: min(100%, 42rem);
+		justify-self: center;
+	}
+	/* A board is as wide as the window is tall, less the chrome above it, so it never needs a scroll. */
+	.trial-play .trial-grid {
+		max-width: max(18rem, calc(100dvh - 21rem));
+		margin-inline: auto;
+	}
+	/* Cards are taller than they are wide, so a card board gets a narrower share of the same height. */
+	.trial-play .trial-grid:has(.playing-card) {
+		max-width: max(16rem, calc((100dvh - 21rem) * 0.72));
+	}
+	.trial-info,
+	.trial-log {
+		padding: 1rem;
+		background: color-mix(in srgb, var(--panel) 45%, transparent);
+		border-radius: var(--radius-s);
+	}
+	.trial-info .piece-token {
+		width: 46px;
+		min-height: 46px;
+		padding: 5px;
+	}
+	.trial-info .piece-token svg {
+		width: 30px;
+		height: 30px;
+	}
+	.trial-info .piece-row {
+		gap: 8px;
+	}
+	.trial-info .piece-display {
+		gap: 8px;
+	}
+	.trial-info .trial-facts-panel {
+		border-bottom: 0;
+		padding-bottom: 0;
+	}
+}
+
+/* ---------- round tracker ---------- */
+.round-track {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: 0.3rem 0.7rem;
+	margin-bottom: 0.5rem;
+	font-size: 0.85rem;
+	font-weight: 800;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+}
+.round-track strong {
+	font-size: 1.05rem;
+}
+.round-pips {
+	display: flex;
+	gap: 4px;
+}
+.round-pips i {
+	width: 14px;
+	height: 14px;
+	border: 2px solid var(--ink);
+	border-radius: 50%;
+	background: var(--glint);
+}
+.round-pips .is-done {
+	background: var(--ink);
+}
+.round-pips .is-now {
+	background: var(--gold);
+	box-shadow: 0 0 0 3px color-mix(in srgb, var(--gold) 45%, transparent);
+}
+.round-track progress {
+	width: 8rem;
+	height: 10px;
+	appearance: none;
+	border: 2px solid var(--ink);
+	border-radius: 999px;
+	background: var(--glint);
+	overflow: hidden;
+}
+.round-track progress::-webkit-progress-bar {
+	background: var(--glint);
+}
+.round-track progress::-webkit-progress-value {
+	background: var(--gold);
+}
+.round-track progress::-moz-progress-bar {
+	background: var(--gold);
+}
+/* Engines name some phases in lower case ("riddle"); a title starts with a capital. */
+.trial-heading h2::first-letter {
+	text-transform: uppercase;
+}

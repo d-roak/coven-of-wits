@@ -1,0 +1,225 @@
+.feedback-trigger {
+	position: fixed;
+	z-index: 20;
+	right: max(16px, env(safe-area-inset-right));
+	bottom: max(16px, env(safe-area-inset-bottom));
+	border-radius: var(--radius);
+	box-shadow: var(--drop);
+}
+.feedback-trigger svg {
+	width: 25px;
+	height: 25px;
+}
+.feedback-dialog {
+	width: min(94vw, 520px);
+	max-height: 88dvh;
+	overflow-y: auto;
+	color: var(--ink);
+	background: var(--paper);
+	border: 3px solid var(--ink);
+	border-radius: var(--radius);
+	box-shadow: var(--drop);
+	padding: 22px;
+}
+.feedback-dialog::backdrop {
+	background: rgb(from var(--hill-3) r g b / 0.72);
+}
+.feedback-dialog > header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+	margin-bottom: 16px;
+}
+.feedback-dialog > header > div {
+	display: flex;
+	align-items: center;
+	gap: 9px;
+}
+.feedback-dialog h2 {
+	font: 400 1.5rem/1.2 var(--font-display);
+}
+.feedback-dialog header svg {
+	width: 28px;
+	height: 28px;
+}
+.feedback-dialog header button {
+	padding: 7px;
+	min-width: 44px;
+	min-height: 44px;
+}
+.feedback-dialog > p {
+	margin: 12px 0;
+}
+.feedback-dialog a {
+	color: var(--ember-deep);
+	overflow-wrap: anywhere;
+}
+.feedback-dialog a.btn {
+	color: var(--paper);
+}
+.feedback-kinds {
+	display: grid;
+	gap: 12px;
+	margin-top: 20px;
+}
+.feedback-kinds button {
+	justify-content: flex-start;
+	padding: 15px;
+}
+.feedback-kinds svg {
+	width: 27px;
+	height: 27px;
+}
+.feedback-message {
+	display: grid;
+	gap: 8px;
+	font-weight: 800;
+}
+.feedback-message textarea {
+	width: 100%;
+	min-height: 135px;
+	resize: vertical;
+	padding: 12px;
+	border: 2px solid var(--ink);
+	border-radius: var(--radius-s);
+	color: var(--ink);
+	background: var(--glint);
+	font: inherit;
+	font-weight: 600;
+}
+.feedback-message small {
+	font-size: 0.75rem;
+	font-weight: 600;
+	text-align: right;
+}
+.feedback-options {
+	display: grid;
+	gap: 12px;
+	margin: 16px 0;
+	padding-top: 16px;
+	border-top: 1px solid var(--pit);
+}
+.feedback-options label {
+	display: flex;
+	align-items: flex-start;
+	gap: 9px;
+	font-size: 0.85rem;
+}
+.feedback-options input[type="checkbox"] {
+	width: 20px;
+	height: 20px;
+	flex-shrink: 0;
+	accent-color: var(--ember-deep);
+}
+.feedback-dialog summary {
+	cursor: pointer;
+	min-height: 32px;
+	font-size: 0.85rem;
+}
+.feedback-dialog pre {
+	max-height: 210px;
+	overflow: auto;
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+	background: var(--panel);
+	padding: 10px;
+	border-radius: 10px;
+	font-size: 0.7rem;
+}
+.feedback-shot {
+	padding: 0;
+	width: 100%;
+	border: 2px solid var(--ink);
+	border-radius: 10px;
+	background: var(--panel);
+	cursor: zoom-in;
+	overflow: hidden;
+}
+.feedback-shot img {
+	width: 100%;
+	height: 150px;
+	object-fit: contain;
+	display: block;
+}
+.feedback-shot.is-expanded img {
+	height: auto;
+}
+.feedback-shot.is-expanded {
+	cursor: zoom-out;
+}
+.feedback-hint {
+	font-size: 0.75rem;
+}
+.feedback-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	justify-content: space-between;
+	margin-top: 20px;
+}
+.feedback-review {
+	margin: 15px 0;
+	padding: 12px;
+	border-left: 3px solid var(--ember-deep);
+	background: var(--panel);
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}
+.feedback-review-shot {
+	display: block;
+	width: 100%;
+	max-height: 300px;
+	object-fit: contain;
+	margin: 15px 0;
+}
+.feedback-error {
+	color: var(--ember-deep);
+}
+.feedback-done {
+	display: grid;
+	justify-items: center;
+	gap: 15px;
+	padding: 20px 0;
+}
+.feedback-done > svg {
+	width: 60px;
+	height: 60px;
+	color: var(--hill-1);
+}
+.masthead-actions {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-left: auto;
+}
+.github-button svg {
+	width: 21px;
+	height: 21px;
+}
+@media (max-width: 600px) {
+	.feedback-trigger span {
+		display: none;
+	}
+	.feedback-trigger {
+		width: 48px;
+		height: 48px;
+		padding: 9px;
+	}
+	.feedback-dialog {
+		padding: 16px;
+	}
+	.masthead-actions .github-button span {
+		display: none;
+	}
+	.github-button {
+		min-width: 44px;
+		min-height: 44px;
+	}
+}
+@media print {
+	.feedback-trigger,
+	.feedback-dialog {
+		display: none;
+	}
+}
