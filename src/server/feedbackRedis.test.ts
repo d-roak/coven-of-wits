@@ -43,6 +43,24 @@ describe.skipIf(!hasTestRedis)("shared Redis feedback", () => {
 		fetch: fetcher,
 	})
 
+	it("accepts Vercel TLS termination while rejecting foreign and insecure browser origins", async () => {
+		const fetcher = vi.fn<typeof fetch>()
+		const app = createFeedbackRoutes(options(fetcher))
+		for (const [origin, status] of [
+			["https://coven.test", 400],
+			["http://coven.test", 403],
+			["https://elsewhere.test", 403],
+		] as const) {
+			const response = await app.request("http://coven.test/api/feedback", {
+				method: "POST",
+				headers: { "Content-Type": "application/json", Origin: origin },
+				body: "{}",
+			})
+			expect(response.status).toBe(status)
+		}
+		expect(fetcher).not.toHaveBeenCalled()
+	})
+
 	it("coordinates two instances and returns the durable issue without a second POST", async () => {
 		let complete!: (response: Response) => void
 		const fetcher = vi.fn<typeof fetch>(

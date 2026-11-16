@@ -175,7 +175,10 @@ export function createFeedbackRoutes(options: FeedbackOptions = {}) {
 		try {
 			if (!enabled) throw new FeedbackError("NOT_CONFIGURED", 503, "Feedback is not configured yet.")
 			const origin = c.req.header("Origin")
-			if (!origin || origin !== (publicOrigin ?? new URL(c.req.url).origin))
+			const requestUrl = new URL(c.req.url)
+			// Vercel terminates TLS before forwarding to the Node HTTP server.
+			const expectedOrigin = publicOrigin ?? (vercel ? `https://${requestUrl.host}` : requestUrl.origin)
+			if (!origin || origin !== expectedOrigin)
 				throw new FeedbackError("ORIGIN_REJECTED", 403, "Send feedback from this site.")
 			const ip = clientIP(c)
 			if (!ip || !isIP(ip))
