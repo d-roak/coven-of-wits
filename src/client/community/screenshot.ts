@@ -78,27 +78,42 @@ export async function captureScreenshot(): Promise<string> {
 	const capture = async () => {
 		const { default: html2canvas } = await import("html2canvas-pro")
 		if (expired) throw new Error("Screenshot capture timed out. Try capturing it again.")
+		await document.fonts.ready
+		const width = Math.max(document.documentElement.clientWidth, document.documentElement.scrollWidth)
+		const height = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight, window.innerHeight)
 		const canvas = await html2canvas(document.body, {
 			logging: false,
 			allowTaint: false,
 			useCORS: false,
 			foreignObjectRendering: false,
 			imageTimeout: 3000,
-			scale: Math.min(1, SCREENSHOT_WIDTH_MAX / window.innerWidth),
-			x: window.scrollX,
-			y: window.scrollY,
-			width: window.innerWidth,
-			height: window.innerHeight,
+			scale: Math.min(1.5, SCREENSHOT_WIDTH_MAX / width),
+			x: 0,
+			y: 0,
+			width,
+			height,
+			scrollX: 0,
+			scrollY: 0,
 			ignoreElements: (element) => ignoreScreenshotElement(element, origin),
 			onclone: (doc) => {
 				frame.element = doc.defaultView?.frameElement ?? null
+				// Canvas does not reproduce blend modes or the browser's closed-details rendering.
+				const style = doc.createElement("style")
+				style.textContent = `
+					*, *::before, *::after { animation: none !important; transition: none !important; }
+					body::after { display: none !important; }
+					.scene { z-index: 0; }
+					.app { z-index: 1; }
+					details:not([open]) > :not(summary) { display: none !important; }
+				`
+				doc.head.append(style)
 				if (expired) {
 					frame.element?.remove()
 					throw new Error("Screenshot capture timed out. Try capturing it again.")
 				}
 			},
 		})
-		for (const quality of [0.75, 0.55, 0.35]) {
+		for (const quality of [0.95, 0.85, 0.7, 0.55]) {
 			if (expired) throw new Error("Screenshot capture timed out. Try capturing it again.")
 			const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", quality))
 			if (blob && blob.size <= SCREENSHOT_BYTES_MAX) return screenshotDataUrl(blob)
