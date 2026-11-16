@@ -6,6 +6,73 @@
 	role="img"
 	aria-labelledby="title desc"
 >
+	<style>
+		.poff {
+			flex: none;
+			overflow: visible;
+		}
+		.poff-shadow {
+			fill: #292b28;
+			opacity: 0.13;
+		}
+		.poff-body {
+			transform-origin: 50% 100%;
+		}
+		.poff-outline {
+			fill: #292b28;
+			stroke: #292b28;
+			stroke-width: 7;
+		}
+		.poff-fur {
+			fill: var(--fur);
+		}
+		.poff-ink {
+			fill: #292b28;
+		}
+		.poff-line {
+			fill: none;
+			stroke: #292b28;
+			stroke-width: 2.8;
+			stroke-linecap: round;
+			stroke-linejoin: round;
+		}
+		.poff-tuft {
+			fill: none;
+			stroke: #292b28;
+			stroke-width: 2.4;
+			stroke-linecap: round;
+			opacity: 0.16;
+		}
+		.poff-glint {
+			fill: #fff6df;
+		}
+		.poff-blush {
+			fill: #d89583;
+			opacity: 0.9;
+		}
+		.poff-tear {
+			fill: #91b2bb;
+			stroke: #292b28;
+			stroke-width: 1.5;
+		}
+		.poff-hat,
+		.poff-scarf {
+			fill: var(--hat);
+			stroke: #292b28;
+			stroke-width: 3.5;
+			stroke-linejoin: round;
+		}
+		.poff-band {
+			fill: #dfba6e;
+			stroke: #292b28;
+			stroke-width: 2.5;
+			stroke-linejoin: round;
+		}
+		.poff-hat-group {
+			transform: rotate(-7deg);
+			transform-origin: 60px 62px;
+		}
+	</style>
 	<title id="title">Coven of Wits</title>
 	<desc id="desc">Three small mages gather around a candlelit game table in a forest.</desc>
 	<rect width="1200" height="420" rx="24" fill="#283d35" />
